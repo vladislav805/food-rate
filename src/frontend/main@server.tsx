@@ -87,7 +87,7 @@ service.get('/*', async(req, res) => {
 
     const [activeRoute] = activeRoutes;
     const context = getUserContext(req);
-    const initialData = getDataByRoute(context, activeRoute);
+    const initialData = await getDataByRoute(context, activeRoute);
 
     if (req.query.ajax) {
         res.send(initialData);

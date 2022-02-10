@@ -1,5 +1,6 @@
 import 'dotenv/config';
-import * as restana from 'restana';
+import * as path from 'path';
+import * as express from 'express';
 import * as cookieParser from 'cookie-parser';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/server';
@@ -21,16 +22,16 @@ import Root from '@components/Root';
 import type { IGlobalContext } from '@components/GlobalContext';
 import { ServerInitialDataContext } from '@components/ServerInitialDataContext';
 
-const getUserContext = (request: restana.Request<restana.Protocol.HTTP>): UserContext => {
+const getUserContext = (request: express.Request): UserContext => {
     return (request as unknown as { ctx: UserContext }).ctx;
 };
 
 const COOKIE_NAME_AUTH_HASH = 'auth_hash';
 
-const service = restana();
+const service = express();
 
-// @ts-ignore Несовпадение типов между express и restana
 service.use(cookieParser());
+service.use('/static', express.static(path.join(__dirname, 'static')));
 
 /**
  * Добавление информации о пользователе перед использованием в роутере
@@ -58,7 +59,7 @@ service.get('/auth/:provider', async(req, res) => {
 
     const query = req.query as unknown as ITelegramAuthResult;
 
-    if (!isValidTelegramHash(query, process.env.BOT_SECRET as string)) {
+    if (!isValidTelegramHash(query, process.env.TELEGRAM_BOT_SECRET as string)) {
         res.send('invalid hash');
         return;
     }
@@ -117,5 +118,6 @@ service.get('/*', async(req, res) => {
     res.end();
 });
 
-
-service.start(1112);
+    service.listen(1112, () => {
+    console.log('Express started');
+});

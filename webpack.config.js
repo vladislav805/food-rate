@@ -12,7 +12,8 @@ module.exports = {
         main: path.resolve('src', 'frontend', 'main@client.tsx'),
     },
     output: {
-        path: path.resolve('dist'),
+        path: path.resolve('dist', 'static'),
+        publicPath: '/static',
         filename: `index.js`,
     },
     module: {

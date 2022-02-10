@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { Sequelize } from 'sequelize';
+import * as mysql2 from 'mysql2';
 
 import type { ModelInitializer } from './typings';
 import User, { init as initUser } from './models/user';
@@ -12,6 +13,7 @@ import Branch, { init as initBranch } from '@database/models/branch';
 
 const sequelize = new Sequelize(process.env.DATABASE_URI as string, {
     dialect: 'mariadb',
+    dialectModule: mysql2,
 });
 
 const models: ModelInitializer[] = [

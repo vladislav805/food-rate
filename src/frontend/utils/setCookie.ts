@@ -1,4 +1,4 @@
-import * as restana from 'restana';
+import * as express from 'express';
 
 type ISetCookieOptions = Partial<{
     Expires: Date | string | number;
@@ -10,7 +10,7 @@ type ISetCookieOptions = Partial<{
     SameSite: 'Strict' | 'Lax' | 'None';
 }>;
 
-export function setCookie(res: restana.Response<restana.Protocol.HTTP>, name: string, value: string, options: ISetCookieOptions = {}): void {
+export function setCookie(res: express.Response, name: string, value: string, options: ISetCookieOptions = {}): void {
     const headerValue: string[] = [`${name}=${decodeURIComponent(value)}`];
 
     if (options.Expires) {

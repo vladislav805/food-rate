@@ -56,10 +56,10 @@ const fetchers: Record<string, RouteFetcher> = {
  * @param context Контекст запроса пользователя
  * @param route Сработавший маршрут
  */
-export const getDataByRoute = (context: UserContext, route: RouteMatch) => {
+export const getDataByRoute = (context: UserContext, route: RouteMatch): Promise<any> => {
     const path = route.route.path!;
 
     return path in fetchers
         ? fetchers[path](context, route)
-        : {};
+        : Promise.resolve({});
 };

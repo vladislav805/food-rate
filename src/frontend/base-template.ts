@@ -15,19 +15,15 @@ export const baseTemplate = (markup: string, meta: IBaseTemplateMeta): string =>
     <head>
         <meta charset="utf-8" />
         <title>${documentTitle}</title>
-        <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href="/static/styles.css" />
     </head>
     <body>
         <div id="Root">${markup}</div>    
         <script>
             window.__context__=${JSON.stringify(globalContext)};
             window.__initial__=${JSON.stringify({ key, data: initialData })};
-        </script>
-        
-        <script crossorigin src="https://unpkg.com/react@rc/umd/react.development.js"></script>
-        <script crossorigin src="https://unpkg.com/react-dom@rc/umd/react-dom.development.js"></script>
-        
-        <script src="/index.js"></script>
+        </script> 
+        <script src="/static/index.js"></script>
     </body>
 </html>
 `;

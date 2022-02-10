@@ -72,7 +72,7 @@ service.get('/auth/:provider', async(req, res) => {
     setCookie(res, COOKIE_NAME_AUTH_HASH, auth.hash, {
         HttpOnly: true,
         Path: '/',
-        Expires: Date.now() + 4 * MONTH,
+        Expires: Date.now() + (4 * MONTH * 1000),
     });
     res.setHeader('Location', '/');
     res.end();

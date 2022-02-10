@@ -1,0 +1,33 @@
+.StarRatingStatic {
+    display: flex;
+    flex-flow: row nowrap;
+
+    align-items: center;
+
+    &-Block {
+        display: flex;
+        flex-flow: row nowrap;
+
+        font-size: 20px;
+
+        user-select: none;
+        cursor: default;
+    }
+
+    &__large &-Block {
+        font-size: 28px;
+    }
+
+    &_filled {
+        color: orange;
+    }
+
+    &_empty {
+        color: gray;
+    }
+
+    &-Voters {
+        color: gray;
+        margin-left: .8rem;
+    }
+}

@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "target": "esnext",
+        "jsx": "react",
+        "sourceMap": true,
+        "strict": true,
+        "lib": ["es6", "es7", "es2020", "DOM"],
+        "noImplicitReturns": false,
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "baseUrl": "src",
+        "paths": {
+            "@server/*": ["server/*"],
+            "@database": ["server/database"],
+            "@database/*": ["server/database/*"],
+            "@utils/*": ["utils/*", "frontend/utils/*"],
+            "@typings": ["typings"],
+            "@typings/*": ["typings/*"],
+            "@frontend/*": ["frontend/*"],
+            "@components/*": ["frontend/components/*"],
+            "@pages/*": ["frontend/pages/*"]
+        },
+        "types": ["react/next", "react-dom/next", "node"]
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules/*",
+        "src/tests/*"
+    ]
+}

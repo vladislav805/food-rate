@@ -1,0 +1,39 @@
+@import '../../scss/hide-scroll';
+
+.CategoryList {
+    overflow-x: scroll;
+
+    @include hide-scroll;
+
+    &-Content {
+        display: inline-flex;
+        flex-flow: row nowrap;
+        padding: .5rem;
+    }
+
+    &-Item {
+        display: inline-block;
+        white-space: nowrap;
+
+        &:not(:last-child) {
+            margin-right: .5rem;
+        }
+    }
+
+    &-Link {
+        display: block;
+        text-decoration: none;
+        color: #5d5d5d;
+
+        background: #dfdfdf;
+
+        padding: 0 .7rem;
+        line-height: 1.6rem;
+
+        border-radius: .2rem;
+    }
+
+    &-Item_selected &-Link {
+        background: #b5b5b5;
+    }
+}

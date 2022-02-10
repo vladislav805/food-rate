@@ -1,0 +1,15 @@
+.Review {
+    margin: .7rem 1rem;
+
+    &-Header {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-Footer {
+        margin-top: .4rem;
+        color: gray;
+    }
+}

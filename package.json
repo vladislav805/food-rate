@@ -4,11 +4,14 @@
   "description": "Food rate",
   "main": "src/index.ts",
   "scripts": {
-    "dev": "npm-run-all -p dev:frontend dev:server dev:client",
-    "dev:server": "ts-node -r tsconfig-paths/register src/server",
-    "dev:frontend": "ts-node-dev --require ./ts-loader.fix.js -r tsconfig-paths/register src/frontend/service.tsx",
+    "dev": "npm-run-all -p dev:frontend dev:backend dev:client",
+    "dev:backend": "ts-node -r tsconfig-paths/register src/server",
+    "dev:frontend": "ts-node-dev --require ./ts-loader.fix.js -r tsconfig-paths/register src/frontend/main@server.tsx",
     "dev:client": "webpack serve",
-    "test": "ts-node -r tsconfig-paths/register src/test"
+    "test": "ts-node -r tsconfig-paths/register src/test",
+    "clean": "rm -rf dist",
+    "build:server1": "tsc -p ./tsconfig.production.json && tsc-alias -p ./tsconfig.production.json",
+    "build:server": "webpack --config ./webpack@server.production.config.js"
   },
   "keywords": [
     "food"

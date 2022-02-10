@@ -9,7 +9,7 @@ const mode = isProduction ? 'production' : 'development';
 module.exports = {
     mode,
     entry: {
-        main: path.resolve('src', 'frontend', 'client.tsx'),
+        main: path.resolve('src', 'frontend', 'main@client.tsx'),
     },
     output: {
         path: path.resolve('dist'),
@@ -26,7 +26,7 @@ module.exports = {
                     {
                         loader: 'ts-loader',
                         options: {
-                            configFile: 'tsconfig.client.json',
+                            configFile: 'tsconfig.json',
                         },
                     },
                 ],

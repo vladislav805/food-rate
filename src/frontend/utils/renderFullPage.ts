@@ -1,13 +1,13 @@
 import type { IGlobalContext } from '@components/GlobalContext';
 
-type IBaseTemplateMeta = {
+type IFullPageOptions = {
     documentTitle: string;
     globalContext: IGlobalContext;
     key: string;
     initialData?: any;
 };
 
-export const baseTemplate = (markup: string, meta: IBaseTemplateMeta): string => {
+export const renderFullPage = (markup: string, meta: IFullPageOptions): string => {
     const { documentTitle, key, initialData, globalContext } = meta;
 
     return `<!DOCTYPE html>

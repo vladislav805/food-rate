@@ -16,7 +16,7 @@ import { MONTH } from '@utils/date';
 import { handleApiRequest } from '@frontend/api';
 import routes, { Route } from '@frontend/routes';
 import { getDataByRoute } from '@frontend/pages@server';
-import { baseTemplate } from '@frontend/base-template';
+import { renderFullPage } from '@utils/renderFullPage';
 
 import Root from '@components/Root';
 import type { IGlobalContext } from '@components/GlobalContext';
@@ -109,7 +109,7 @@ service.get('/*', async(req, res) => {
         </ServerInitialDataContext.Provider>
     );
 
-    res.write(baseTemplate(renderedHtml, {
+    res.write(renderFullPage(renderedHtml, {
         documentTitle: 'Main',
         key,
         initialData,

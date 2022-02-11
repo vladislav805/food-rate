@@ -1,5 +1,8 @@
 import * as React from 'react';
 import type { IBranch } from '@typings/objects';
+import { branchListCn, branchListItemCn } from './const';
+
+import './BranchList.scss';
 
 type IBranchListProps = {
     branches: IBranch[];
@@ -7,13 +10,16 @@ type IBranchListProps = {
 
 const BranchList: React.FC<IBranchListProps> = ({ branches }) => {
     return (
-        <div>
-            <ul>
-                {branches.map(branch => (
-                    <li key={branch.id}>{branch.address}</li>
-                ))}
-            </ul>
-        </div>
+        <ul className={branchListCn}>
+            {branches.map(branch => (
+                <li
+                    key={branch.id}
+                    className={branchListItemCn}
+                >
+                    {branch.address}
+                </li>
+            ))}
+        </ul>
     );
 };
 

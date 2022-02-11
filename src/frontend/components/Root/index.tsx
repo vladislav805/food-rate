@@ -15,7 +15,7 @@ type IRootProps = {
 const Root: React.FC<IRootProps> = ({ global }) => {
     return (
         <GlobalContext.Provider value={global}>
-            <Header />
+            <Header title={global.title} />
             <Routes>
                 {routes.map(({ path, component: C }) => (
                     <Route key={path} path={path} element={<C />} />

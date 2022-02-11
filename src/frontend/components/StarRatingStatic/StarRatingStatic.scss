@@ -9,15 +9,17 @@
         flex-flow: row nowrap;
 
         font-size: 20px;
+        line-height: 1;
 
         user-select: none;
         cursor: default;
     }
 
-    &__large &-Block {
+    &_large &-Block {
         font-size: 28px;
     }
 
+    // todo: унести это в block
     &_filled {
         color: orange;
     }
@@ -26,8 +28,18 @@
         color: gray;
     }
 
+    &_centered {
+        justify-content: center;
+    }
+
     &-Voters {
         color: gray;
         margin-left: .8rem;
+    }
+
+    &-Value {
+        font-size: 24px;
+        font-weight: 900;
+        margin-right: .8rem;
     }
 }

@@ -99,6 +99,7 @@ service.get('/*', async(req, res) => {
 
     const globalContext: IGlobalContext = {
         user: context.getAuth()?.user ?? null,
+        title: 'Main',
     };
 
     const renderedHtml = ReactDOM.renderToString(

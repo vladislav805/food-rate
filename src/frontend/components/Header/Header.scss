@@ -1,0 +1,35 @@
+.Header {
+    $height: 3rem;
+
+    display: flex;
+    flex-flow: row nowrap;
+
+    background: green;
+    color: white;
+
+    height: $height;
+
+    &-Hamburger {
+        width: $height;
+        height: $height;
+        line-height: 0;
+
+        background: transparent;
+
+        cursor: pointer;
+
+        svg {
+            fill: white;
+            width: 2rem;
+            height: 2rem;
+            margin: .5rem;
+        }
+    }
+
+    &-Title {
+        flex: 1;
+        font: 1.2rem Roboto;
+        line-height: 2rem;
+        margin: .5rem .2rem;
+    }
+}

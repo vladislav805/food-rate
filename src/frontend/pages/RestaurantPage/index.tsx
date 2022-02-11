@@ -4,11 +4,21 @@ import type { IList } from '@typings';
 import { fetchers } from '@frontend/pages@client';
 import type { IBranch, ICategory, IDish, IRestaurant } from '@typings/objects';
 import StarRatingStatic from '@components/StarRatingStatic';
-import CategoryList from '@components/CategoryList';
 import DishList from '@components/DishList';
+import BranchList from '@components/BranchList';
+import Tabs from '@components/Tabs';
 import { useFetch } from '@utils/useFetch';
 import { withNumericParams } from '@utils/withNumericParams';
-import BranchList from '@components/BranchList';
+
+import {
+    restaurantPageCn,
+    restaurantPageDescriptionCn,
+    restaurantPageHeaderCn,
+    restaurantPageTitleCn
+} from './const';
+
+
+import './RestaurantPage.scss';
 
 export type IRestaurantPageData = {
     restaurant: IRestaurant;
@@ -18,29 +28,45 @@ export type IRestaurantPageData = {
     average: { count: number; value: number };
 };
 
-const RestaurantPage: React.FC = (props) => {
+const tabTitles: string[] = ['Блюда', 'Филиалы'];
+
+const RestaurantPage: React.FC = () => {
     const { restaurantId } = useParams();
     const { result, loading } = useFetch<IRestaurantPageData>(`rest${restaurantId}`, fetchers.restaurant, { restaurantId: restaurantId! });
 
-    if (!result) return <>loading...</>;
+    const [selectedTab, setSelectedTab] = React.useState<number>(0);
+
+    if (!result || loading) return <>loading...</>;
 
     const { restaurant, dishes, categories, average, branches } = result;
 
     return (
-        <div>
-            <h1>{restaurant.title}</h1>
-            <div>
-                <StarRatingStatic
-                    value={average.value}
-                    count={average.count}
-                />
+        <div className={restaurantPageCn}>
+            <div className={restaurantPageHeaderCn}>
+                <h1 className={restaurantPageTitleCn}>{restaurant.title}</h1>
+                {restaurant.description && (
+                    <p className={restaurantPageDescriptionCn}>{restaurant.description}</p>
+                )}
             </div>
-            <BranchList branches={branches.items} />
-            <DishList
-                restaurant={restaurant}
-                dishes={dishes}
-                categories={categories}
+            <StarRatingStatic
+                value={average.value}
+                count={average.count}
+                large
+                centered
+                showValue
             />
+            <Tabs
+                titles={tabTitles}
+                selectedIndex={selectedTab}
+                setSelectedIndex={setSelectedTab}
+            >
+                <DishList
+                    restaurant={restaurant}
+                    dishes={dishes}
+                    categories={categories}
+                />
+                <BranchList branches={branches.items} />
+            </Tabs>
         </div>
     );
 };

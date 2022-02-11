@@ -5,3 +5,4 @@ export const starRatingStaticBlockCn = cnStarRatingStatic('Block');
 export const starRatingStaticFilledCn = cnStarRatingStatic({ filled: true });
 export const starRatingStaticEmptyCn = cnStarRatingStatic({ empty: true });
 export const starRatingStaticVotersCn = cnStarRatingStatic('Voters');
+export const starRatingStaticValueCn = cnStarRatingStatic('Value');

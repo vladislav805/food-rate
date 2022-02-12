@@ -110,6 +110,7 @@ service.get('/*', async(req, res) => {
         </ServerInitialDataContext.Provider>
     );
 
+    res.setHeader('Content-type', 'text/html; charset=utf-8');
     res.write(renderFullPage(renderedHtml, {
         documentTitle: 'Main',
         key,

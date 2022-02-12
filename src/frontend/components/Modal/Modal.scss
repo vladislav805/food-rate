@@ -1,0 +1,79 @@
+.Modal {
+    $animation-duration: .3s;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: end;
+
+    &-Overlay {
+        z-index: 50;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .4);
+
+        animation: modal-overlay-open ease-out $animation-duration;
+
+        @keyframes modal-overlay-open {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    }
+
+    &-Window {
+        z-index: 55;
+
+        background: white;
+
+        max-height: 75vh;
+
+        overflow-y: auto;
+
+        animation: modal-window-open ease-out $animation-duration;
+
+        @keyframes modal-window-open {
+            0% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    }
+
+    &_closing &-Overlay {
+        animation: modal-overlay-close ease-out $animation-duration;
+
+        @keyframes modal-overlay-close {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    }
+
+    &_closing &-Window {
+        animation: modal-window-close ease-out $animation-duration;
+
+        @keyframes modal-window-close {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+    }
+}

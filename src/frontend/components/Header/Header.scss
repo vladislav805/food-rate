@@ -4,7 +4,7 @@
     display: flex;
     flex-flow: row nowrap;
 
-    background: green;
+    background: var(--color-primary);
     color: white;
 
     height: $height;

@@ -16,7 +16,11 @@
     }
 
     &_large &-Block {
-        font-size: 28px;
+        font-size: 22px;
+
+        @media screen and (min-width: 400px) {
+            font-size: 28px;
+        }
     }
 
     // todo: унести это в block
@@ -38,8 +42,12 @@
     }
 
     &-Value {
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 900;
         margin-right: .8rem;
+
+        @media screen and (min-width: 400px) {
+            font-size: 24px;
+        }
     }
 }

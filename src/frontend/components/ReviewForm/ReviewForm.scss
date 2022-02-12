@@ -1,0 +1,24 @@
+@import '../../scss/const';
+
+.ReviewForm {
+    position: relative;
+    padding: 0 $default-padding-horizontal;
+
+    &-Content {
+        margin: 1rem 0 .5rem;
+    }
+
+    .StarRating {
+        margin: 0 auto;
+    }
+
+    &-Footer {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: end;
+        padding: .5rem 0;
+        position: sticky;
+        bottom: 0;
+        background: white;
+    }
+}

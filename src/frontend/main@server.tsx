@@ -31,6 +31,7 @@ const COOKIE_NAME_AUTH_HASH = 'auth_hash';
 const service = express();
 
 service.use(cookieParser());
+service.use(express.json());
 service.use('/static', express.static(path.join(__dirname, 'static')));
 
 /**
@@ -42,9 +43,13 @@ service.use(async(req, res, next) => {
     next();
 });
 
-service.get('/api/v1/:method', (req, res) => {
+service.all('/api/v1/:method', (req, res) => {
     res.setHeader('Content-type', 'application/json; charset=utf-8');
-    res.send(handleApiRequest(req, getUserContext(req)));
+    const context = getUserContext(req);
+
+    handleApiRequest(req, context).then(result => {
+        res.send(result);
+    });
 });
 
 const supportedProviders: string[] = ['telegram'];

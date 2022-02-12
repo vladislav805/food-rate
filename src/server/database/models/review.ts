@@ -6,7 +6,7 @@ export interface ReviewAttributes {
     id: number;
     userId: number;
     dishId: number;
-    branchId: number;
+    branchId: number | null;
     rate: number; // 1-10
     text: string;
 }
@@ -60,7 +60,7 @@ export const init: ModelInitializer = sequelize => {
         },
         branchId: {
             type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            allowNull: true,
             unique: UNIQUE_REVIEW,
         },
         rate: {

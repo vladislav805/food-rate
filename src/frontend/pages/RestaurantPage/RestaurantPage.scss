@@ -1,5 +1,7 @@
+@import '../../scss/const';
+
 .RestaurantPage {
     &-Header {
-        padding: 0 .5rem;
+        padding: 0 $default-padding-horizontal;
     }
 }

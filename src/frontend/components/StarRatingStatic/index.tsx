@@ -26,11 +26,13 @@ const MAX = 10;
 const STAR_BLACK = '★';
 const STAR_WHITE = '☆';
 
+const nbsp = '\xA0';
+
 const votersPluralize: IPluralizeCases = {
-    none: 'Ни одной оценки',
-    one: '{} оценка',
-    some: '{} оценки',
-    many: '{} оценок',
+    none: `Оценок${nbsp}нет`,
+    one: `{}${nbsp}оценка`,
+    some: `{}${nbsp}оценки`,
+    many: `{}${nbsp}оценок`,
 };
 
 const StarRatingStatic: React.FC<IStarRatingStaticProps> = (props) => {

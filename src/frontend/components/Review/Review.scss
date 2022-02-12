@@ -1,5 +1,13 @@
+@import '../../scss/const';
+
 .Review {
-    margin: .7rem 1rem;
+    padding: .5rem $default-padding-horizontal;
+
+    box-shadow: 0 0 1rem rgba(0, 0, 0, .1);
+
+    & + & {
+        margin-top: .7rem;
+    }
 
     &-Header {
         display: flex;
@@ -9,7 +17,8 @@
     }
 
     &-Footer {
-        margin-top: .4rem;
+        margin-top: .2rem;
         color: gray;
+        font-size: smaller;
     }
 }

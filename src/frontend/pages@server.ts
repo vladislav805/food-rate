@@ -40,9 +40,11 @@ const fetchers: Record<string, RouteFetcher> = {
 
         if (!dish) throw new Error('Dish not found');
 
-        const reviews = await context.getReviewsByDishId(dish.id, 50, 0);
+        const reviews = await context.getReviewsByDishId(dish.id, 20, 0);
 
-        return { restaurant, dish, reviews };
+        const myReview = await context.getReviewOfDishByUser(dish.id, )
+
+        return { restaurant, dish, reviews, myReview };
     },
 
     '/categories': async(context) => {

@@ -402,22 +402,54 @@ export class UserContext {
     }
 
     /**
+     * Возвращает отзыв на блюда от конкретного пользователя или null
+     * @param dishId Идентификатор блюда
+     * @param userId Идентификатор пользователя
+     */
+    public async getReviewOfDishByUser(dishId: number, userId: number | undefined = this.user?.id): Promise<IReview | null> {
+        if (userId === undefined) return null;
+
+        const review = await Review.findOne({
+            where: { dishId, userId },
+            include: {
+                model: User,
+                as: 'user',
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                },
+            },
+        });
+
+        return review as IReview | null;
+    }
+
+    /**
      * Создаёт отзыв на блюдо в ресторане
      * @param dishId Идентификатор блюда
-     * @param branchId Идентификатор филиала заведения
+     * @-param branchId Идентификатор филиала заведения
      * @param rate Оценка (1-10)
      * @param text Текст отзыва
      */
-    public createReview(dishId: number, branchId: number, rate: number, text: string): Promise<Review> {
+    public async createReview(dishId: number, rate: number, text: string): Promise<IReview> {
         if (!this.user) throw new Error('Access denied');
 
-        return Review.create({
+        const review = await Review.create({
             userId: this.user.id,
             dishId,
-            branchId,
+            branchId: null,
             rate,
             text,
+        }, {
+            include: {
+                model: User,
+                as: 'user',
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt'],
+                },
+            },
         });
+
+        return review as unknown as IReview;
     }
 
     /**

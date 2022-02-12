@@ -1,0 +1,61 @@
+.Button {
+    border: 2px solid var(--color-primary);
+    background: transparent;
+    line-height: 1.8rem;
+    padding: 0 .7rem;
+
+    overflow: hidden;
+
+    position: relative;
+
+    cursor: pointer;
+
+    &:hover {
+
+    }
+
+    &:disabled {
+        background: rgba(96, 96, 96, .4);
+    }
+
+    &_pressed::before {
+        content: '';
+        position: absolute;
+        display: block;
+        top: var(--ripple-y, -999px);
+        left: var(--ripple-x, -999px);
+
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+                        rgba(128, 192, 128, .2),
+                        rgba(128, 192, 128, .6)
+        );
+        border-radius: 50%;
+
+        opacity: 0;
+
+        animation: button_ripple .3s ease-in;
+
+        @keyframes button_ripple {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+    }
+}

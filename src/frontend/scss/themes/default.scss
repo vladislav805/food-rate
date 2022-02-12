@@ -1,0 +1,10 @@
+@import '../const';
+
+:root {
+    --color-primary: #{$color-primary};
+
+    --input-border: #{$color-primary};
+    --input-focus-h: 162; // 162
+    --input-focus-s: 41%; // 63
+    --input-focus-l: 41%; // 41
+}

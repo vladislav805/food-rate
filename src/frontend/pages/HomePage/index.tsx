@@ -7,7 +7,6 @@ import AuthButton from '@components/AuthButton';
 import GlobalContext from '@components/GlobalContext';
 import { useFetch } from '@utils/useFetch';
 import { fetchers } from '../../pages@client';
-import StarRating from '@components/StarRating';
 
 export type IHomePageData = {
     restaurants: IList<IRestaurant>;
@@ -18,12 +17,11 @@ const HomePage: React.FC = () => {
 
     const globalContext = React.useContext(GlobalContext);
 
-    if (!result) return <>loading...</>;
+    if (!result || loading) return <>loading...</>;
 
     return (
         <div>
             <p>Home page</p>
-            <StarRating name={"test"} />
             {!globalContext.user ? <AuthButton bot="FoodRateBot" /> : null}
             {result?.restaurants?.items.map(restaurant => (
                 <div key={restaurant.id}>

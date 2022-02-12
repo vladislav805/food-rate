@@ -1,14 +1,36 @@
 import * as React from 'react';
+import type { IList } from '@typings';
+import type { IReview } from '@typings/objects';
 import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
 
-async function request<T>(url: string): Promise<T> {
-    const request = await fetch(`${url}?ajax=1`, {
+type Params = Record<string, string | number | boolean>;
+type TrueParams = Record<string, string>;
+
+async function request<T>(url: string, params: Params = {}): Promise<T> {
+    params.ajax = '1';
+    const queryString = new URLSearchParams(params as TrueParams);
+
+    const request = await fetch(`${url}?${queryString}`, {
         mode: 'cors',
         method: 'get',
+    });
 
+    return request.json();
+}
+
+async function apiRequest<T>(method: string, params: Params): Promise<T> {
+    const request = await fetch(`/api/v1/${method}`, {
+        mode: 'cors',
+        method: 'post',
+        cache: 'no-cache',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params),
     });
 
     return request.json();
@@ -29,5 +51,13 @@ export const fetchers = {
 
     categories: async() => {
         return request<ICategoriesPageData>(`/categories`);
+    },
+
+    getReviews: async(params: Record<string, number>) => {
+        return apiRequest<IList<IReview>>('reviews', params);
+    },
+
+    addReview: async(params: { dishId: number; text: string; rate: number }) => {
+        return apiRequest<IReview>('addReview', params);
     },
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { IList } from '@typings';
-import type { IReview } from '@typings/objects';
+import type { IRestaurant, IReview } from '@typings/objects';
 import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
@@ -33,7 +33,13 @@ async function apiRequest<T>(method: string, params: Params): Promise<T> {
         body: JSON.stringify(params),
     });
 
-    return request.json();
+    const result = await request.json();
+
+    if ('error' in result) {
+        throw result.error;
+    }
+
+    return result.result as T;
 }
 
 export const fetchers = {
@@ -63,5 +69,9 @@ export const fetchers = {
 
     deleteReview: async(params: { dishId: number, reviewId: number}) => {
         return apiRequest<boolean>('deleteReview', params);
-    }
+    },
+
+    addRestaurant: async(params: { title: string; description: string }) => {
+        return apiRequest<IRestaurant>('addRestaurant', params);
+    },
 };

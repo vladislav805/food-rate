@@ -1,10 +1,11 @@
 import * as express from 'express';
 import type { UserContext } from '@database/UserContext';
-import { addCategory, addReview, deleteReview, reviews } from '@frontend/endpoints';
+import { addCategory, addRestaurant, addReview, deleteReview, reviews } from '@frontend/endpoints';
 
 export type Endpoint = (context: UserContext, req: express.Request) => Promise<any>;
 
 const endpoints: Record<string, Endpoint> = {
+    addRestaurant,
     addCategory,
     addReview,
     deleteReview,

@@ -2,7 +2,7 @@
 
 
 // Restaurant
-
+export * from './addRestaurant';
 
 // Dish
 

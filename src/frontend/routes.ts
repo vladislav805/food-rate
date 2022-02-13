@@ -4,6 +4,7 @@ import RestaurantPage from '@pages/RestaurantPage';
 import DishPage from '@pages/DishPage';
 import { RouteMatch } from 'react-router';
 import CategoriesPage from '@pages/CategoriesPage';
+import NewRestaurantPage from '@pages/NewRestaurantPage';
 
 export type Route = {
     path: string;
@@ -21,6 +22,11 @@ const routes: Route[] = [
         path: '/',
         component: HomePage,
         getKey: () => 'home',
+    },
+    {
+        path: '/restaurant/new',
+        component: NewRestaurantPage,
+        getKey: () => `new_rest`,
     },
     {
         path: '/restaurant/:restaurantId',

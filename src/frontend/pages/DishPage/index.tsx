@@ -18,8 +18,10 @@ import {
     dishPageCn,
     dishPageDescriptionCn,
     dishPageHeaderCn,
-    dishPageMetaCn, dishPageRatingCn,
-    dishPageTitleCn
+    dishPageMetaCn,
+    dishPageRateButtonCn,
+    dishPageRatingCn,
+    dishPageTitleCn,
 } from './const';
 
 import './DishPage.scss';
@@ -38,7 +40,8 @@ const DishPage: React.FC = () => {
 
     const [visibleReviewForm, setVisibleReviewForm] = React.useState<boolean>(false);
 
-    const onReviewPublished = React.useCallback((_review: IReview) => {
+    const onReviewListUpdated = React.useCallback(() => {
+        setVisibleReviewForm(false);
         reload();
     }, [result]);
 
@@ -52,9 +55,9 @@ const DishPage: React.FC = () => {
                 <h1 className={dishPageTitleCn}>{dish.title}</h1>
                 <p className={dishPageDescriptionCn}>{dish.description}</p>
                 <p className={dishPageMetaCn}>
-                    {dish.category?.title}
-                    {dish.category ? ', ' : ''}
                     <Link to={`/restaurant/${restaurant.id}`}>{restaurant.title}</Link>
+                    {dish.category && ', '}
+                    {dish.category?.title}
                 </p>
                 <div className={dishPageRatingCn}>
                     <StarRatingStatic
@@ -69,6 +72,7 @@ const DishPage: React.FC = () => {
                             <p>Вы оценили на {myReview.rate}</p>
                         ) : (
                             <Button
+                                className={dishPageRateButtonCn}
                                 type="button"
                                 onClick={() => setVisibleReviewForm(true)}
                                 text="Оценить"
@@ -80,6 +84,7 @@ const DishPage: React.FC = () => {
             <ReviewList
                 dishId={dish.id}
                 reviews={reviews}
+                onReviewListUpdated={onReviewListUpdated}
             />
             <Modal
                 visible={visibleReviewForm}
@@ -87,7 +92,7 @@ const DishPage: React.FC = () => {
             >
                 <ReviewForm
                     dishId={dish.id}
-                    onReviewPublished={onReviewPublished}
+                    onReviewPublished={onReviewListUpdated}
                 />
             </Modal>
         </div>

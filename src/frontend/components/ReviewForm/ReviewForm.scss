@@ -16,9 +16,14 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: end;
+        align-items: center;
         padding: .5rem 0;
         position: sticky;
         bottom: 0;
         background: white;
+    }
+
+    &-Error {
+        color: red;
     }
 }

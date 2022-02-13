@@ -1,10 +1,10 @@
 import type { Endpoint } from '@frontend/api';
 
 export const addReview: Endpoint = (context, request) => {
-    const { query } = request;
-    const dishId = Number(query.dishId);
-    const rate = Number(query.rate);
-    const text = String(query.text ?? '');
+    const { body } = request;
+    const dishId = Number(body.dishId);
+    const rate = Number(body.rate);
+    const text = String(body.text ?? '');
 
     return context.createReview(dishId, rate, text);
 };

@@ -1,5 +1,7 @@
+@use 'sass:math';
+
 .StarRating {
-    $star-size: 1.6rem;
+    $star-size: 26px; // 1.6rem
     $base-zIndex: 20;
     $color: orange;
 
@@ -49,4 +51,53 @@
             background-image: $svg-off;
         }
     }
+
+    &[data-index] &-Fire {
+        $item-size: 5px;
+        content: '';
+        position: absolute;
+        width: $item-size;
+        height: $item-size;
+        border-radius: 50%;
+
+        top: #{math.div($star-size, 2)};
+        left: calc(var(--star-index) * #{$star-size} - #{math.div($star-size + $item-size, 2)});
+
+        box-shadow: 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff, 0 0 #fff;
+        animation:
+                1s fireworks-bang ease-out 1 backwards,
+                1s fireworks-gravity ease-in 1 backwards;
+
+        @keyframes fireworks-bang {
+            to {
+                box-shadow:
+                        46px -51px $color,
+                        -18px -68px $color,
+                        -19px -59px $color,
+                        32px -77px $color,
+                        -1px -20px $color,
+                        22px -69px $color,
+                        -19px -18px $color,
+                        -5px 14px $color,
+                        40px -10px $color,
+                        -5px 0 $color,
+                        -33px -11px $color,
+                        -9px -61px $color,
+                        10px -68px $color,
+                        -3px -81px $color,
+                        33px -29px $color,
+                        4px -20px $color;
+            }
+        }
+
+        @keyframes fireworks-gravity {
+            to {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+        }
+    }
 }
+
+
+

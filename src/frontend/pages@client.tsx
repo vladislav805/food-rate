@@ -60,4 +60,8 @@ export const fetchers = {
     addReview: async(params: { dishId: number; text: string; rate: number }) => {
         return apiRequest<IReview>('addReview', params);
     },
+
+    deleteReview: async(params: { dishId: number, reviewId: number}) => {
+        return apiRequest<boolean>('deleteReview', params);
+    }
 };

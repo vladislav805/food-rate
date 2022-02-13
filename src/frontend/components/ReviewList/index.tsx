@@ -5,6 +5,7 @@ import pluralize from '@utils/pluralize';
 import type { IPluralizeCases } from '@utils/pluralize';
 import Review from '@components/Review';
 import Paginator from '@components/Paginator';
+import GlobalContext from '@components/GlobalContext';
 import { fetchers } from '@frontend/pages@client';
 
 import { reviewListCn, reviewListItemsCn, reviewListTitleCn } from './const';
@@ -14,6 +15,7 @@ import './ReviewList.scss';
 type IReviewListProps = {
     dishId: number;
     reviews?: IList<IReview>;
+    onReviewListUpdated?: () => void;
 };
 
 const reviewsPluralize: IPluralizeCases = {
@@ -26,9 +28,11 @@ const reviewsPluralize: IPluralizeCases = {
 const REVIEWS_PER_PAGE = 20;
 
 const ReviewList: React.FC<IReviewListProps> = props => {
-    const { dishId } = props;
+    const { dishId, onReviewListUpdated } = props;
     const [reviews, setReviews] = React.useState<IList<IReview> | undefined>(props.reviews);
     const [offset, setOffset] = React.useState<number>(0);
+    const globalContext = React.useContext(GlobalContext);
+    const mineUserId = globalContext.user?.id;
 
     React.useEffect(() => {
         if (reviews?.offset?.current === offset) return;
@@ -39,10 +43,18 @@ const ReviewList: React.FC<IReviewListProps> = props => {
             dishId,
             offset,
             limit: REVIEWS_PER_PAGE,
-        }).then(result => {
-            setReviews(result);
-        });
+        }).then(setReviews);
     }, [reviews, offset, dishId]);
+
+    const onDeleteReview = React.useMemo(() => {
+        return (review: IReview) => {
+            if (!reviews) return;
+
+            void fetchers.deleteReview({ dishId, reviewId: review.id }).then(() => {
+                onReviewListUpdated?.();
+            });
+        };
+    }, [reviews]);
 
     return (
         <div className={reviewListCn}>
@@ -53,7 +65,12 @@ const ReviewList: React.FC<IReviewListProps> = props => {
                 <>
                     <div className={reviewListItemsCn}>
                     {reviews.items.map(review => (
-                        <Review key={review.id} review={review} />
+                        <Review
+                            key={review.id}
+                            review={review}
+                            isMine={review.userId === mineUserId}
+                            onDeleteReview={onDeleteReview}
+                        />
                     ))}
                     </div>
                     <Paginator

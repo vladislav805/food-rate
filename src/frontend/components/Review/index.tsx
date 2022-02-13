@@ -11,10 +11,23 @@ import './Review.scss';
 
 type IReviewProps = {
     review: IReview;
+    isMine?: boolean;
+    onDeleteReview?: (review: IReview) => void;
 };
 
-const Review: React.FC<IReviewProps> = ({ review }: IReviewProps) => {
+const Review: React.FC<IReviewProps> = (props) => {
+    const { review, isMine, onDeleteReview } = props;
     const { user } = review;
+
+    const onClickDelete = React.useMemo(() => !onDeleteReview
+        ? undefined
+        : (event: React.MouseEvent) => {
+            event.preventDefault();
+
+            onDeleteReview(review);
+        },
+        [review, onDeleteReview],
+    );
 
     return (
         <div className={cnReview()}>
@@ -27,6 +40,13 @@ const Review: React.FC<IReviewProps> = ({ review }: IReviewProps) => {
             <div className={reviewTextCn}>{review.text}</div>
             <div className={reviewFooterCn}>
                 <DateFormat date={review.createdAt} />
+                {isMine && ' | '}
+                {isMine && (
+                    <a
+                        href="#"
+                        onClick={onClickDelete}
+                    >Удалить</a>
+                )}
             </div>
         </div>
     );

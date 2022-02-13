@@ -7,7 +7,14 @@ import withLabel from '@components/withLabel';
 import useForm from '@utils/useForm';
 import { fetchers } from '@frontend/pages@client';
 
-import { reviewFormCn, reviewFormContentCn, reviewFormFooterCn, reviewFormRatingCn, reviewFormTextCn } from './const';
+import {
+    reviewFormCn,
+    reviewFormContentCn,
+    reviewFormErrorCn,
+    reviewFormFooterCn,
+    reviewFormRatingCn,
+    reviewFormTextCn
+} from './const';
 
 import './ReviewForm.scss';
 
@@ -86,14 +93,16 @@ const ReviewForm: React.FC<IReviewFormProps> = props => {
                 />
             </div>
             <div className={reviewFormFooterCn}>
+                {error && (
+                    <div className={reviewFormErrorCn}>
+                        {error.text}
+                    </div>
+                )}
                 <Button
                     type="submit"
                     text="Отправить"
                     disabled={busy}
                 />
-                {error && (
-                    <div>{error.text}</div>
-                )}
             </div>
         </form>
     );

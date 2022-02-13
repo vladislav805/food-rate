@@ -4,4 +4,12 @@
     &-Header {
         padding: 0 $default-padding-horizontal;
     }
+
+    &-Rating {
+        text-align: center;
+    }
+
+    &-RateButton {
+        margin: 0 auto;
+    }
 }

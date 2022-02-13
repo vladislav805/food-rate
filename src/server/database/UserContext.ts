@@ -432,7 +432,7 @@ export class UserContext {
      */
     public async createReview(dishId: number, rate: number, text: string): Promise<IReview> {
         if (!this.user) throw new Error('Access denied');
-
+console.log({userId: this.user.id, dishId, rate, text});
         const review = await Review.create({
             userId: this.user.id,
             dishId,
@@ -453,10 +453,11 @@ export class UserContext {
     }
 
     /**
-     * Удаляет отзыв на блюдо в ресторане
+     * Удаляет отзыв на блюдо в заведении
+     * @param dishId Идентификатор блюда
      * @param reviewId Идентификатор отзыва
      */
-    public async deleteReview(reviewId: number): Promise<boolean> {
+    public async deleteReview(dishId: number, reviewId: number): Promise<boolean> {
         if (!this.user) throw new Error('Access denied');
 
         const affected = await Review.destroy({ where: { id: reviewId, userId: this.user.id } });

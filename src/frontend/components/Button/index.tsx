@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { IClassNameProps } from '@frontend/typings';
 
-import { buttonCn, buttonPressedCn } from './const';
+import { cnButton, buttonPressedCn } from './const';
 
 import './Button.scss';
 
@@ -14,7 +14,7 @@ interface IButtonProps extends IClassNameProps {
 }
 
 const Button: React.FC<IButtonProps> = props => {
-    const { type = 'button', text, ...rest } = props;
+    const { type = 'button', text, className, ...rest } = props;
 
     const ref = React.createRef<HTMLButtonElement>();
 
@@ -49,7 +49,7 @@ const Button: React.FC<IButtonProps> = props => {
     return (
         <button
             ref={ref}
-            className={buttonCn}
+            className={cnButton(null, [className])}
             type={type}
             {...rest}
         >

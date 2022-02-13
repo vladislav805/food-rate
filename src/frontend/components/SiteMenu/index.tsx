@@ -1,8 +1,11 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
+import Icon from '@mdi/react';
 import Overlay from '@components/Overlay';
 import { root__menuOpened } from '@components/Root/const';
+import useMenuItems from '@components/SiteMenu/items';
 
-import { siteMenuCn } from './const';
+import { siteMenuCn, siteMenuItemCn, siteMenuItemIconCn, siteMenuItemTitleCn } from './const';
 
 import './SiteMenu.scss';
 
@@ -18,6 +21,8 @@ const SiteMenu: React.FC<ISiteMenuProps> = ({ visible, setVisible }) => {
 
     const closeMenu = React.useCallback(() => setVisible(false), [visible]);
 
+    const items = useMenuItems();
+
     return (
         <>
             <Overlay
@@ -26,7 +31,20 @@ const SiteMenu: React.FC<ISiteMenuProps> = ({ visible, setVisible }) => {
                 onClick={closeMenu}
             />
             <div className={siteMenuCn}>
-                menu
+                {items.map(item => (
+                    <Link
+                        className={siteMenuItemCn}
+                        key={item.path}
+                        onClick={closeMenu}
+                        to={item.path}
+                    >
+                        <Icon
+                            className={siteMenuItemIconCn}
+                            path={item.icon}
+                        />
+                        <span className={siteMenuItemTitleCn}>{item.title}</span>
+                    </Link>
+                ))}
             </div>
         </>
     );

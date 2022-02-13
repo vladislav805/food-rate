@@ -21,4 +21,34 @@
     .Root_menu-opened & {
         transform: translateX(100%);
     }
+
+    &-Item {
+        $padding-horizontal: .5rem;
+        $padding-vertical: .4rem;
+        $icon-size: 1.6rem;
+
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        text-decoration: none;
+
+        color: gray;
+
+        padding: $padding-vertical $padding-horizontal;
+
+        &Icon {
+            width: $icon-size;
+            height: $icon-size;
+        }
+
+        &Title {
+            margin-left: $padding-horizontal;
+            flex: 1;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            line-height: $icon-size;
+        }
+    }
 }

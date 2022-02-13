@@ -1,0 +1,24 @@
+@import '../../scss/hide-scroll';
+@import '../../scss/z-indexes';
+
+.SiteMenu {
+    z-index: $zIndex-site-menu;
+    position: fixed;
+    top: 0;
+    right: 100%;
+    min-width: 60vw;
+    max-width: 400px;
+
+    background: white;
+
+    height: 100vh;
+
+    overflow-y: auto;
+    @include hide-scroll;
+
+    transition: transform .2s ease-out;
+
+    .Root_menu-opened & {
+        transform: translateX(100%);
+    }
+}

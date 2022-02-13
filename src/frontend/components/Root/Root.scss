@@ -1,4 +1,14 @@
+@import '../../scss/const';
+
 #Root {
     max-width: 540px;
     margin: 0 auto;
+    // из-за фиксированной шапки
+    padding-top: $header-height;
+}
+
+// При открытом меню или модалке
+.Root_scroll-disable,
+.Root_menu-opened {
+    overflow: hidden;
 }

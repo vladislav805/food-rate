@@ -35,9 +35,9 @@
 
         opacity: 0;
 
-        animation: button_ripple .3s ease-in;
+        animation: button-ripple .3s ease-in;
 
-        @keyframes button_ripple {
+        @keyframes button-ripple {
             0% {
                 transform: translate(-50%, -50%) scale(0.5);
                 opacity: 0;

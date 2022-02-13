@@ -1,5 +1,6 @@
 import './scss/reset.scss';
 import './scss/themes/default.scss';
+import 'animate.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

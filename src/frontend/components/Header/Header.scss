@@ -1,5 +1,13 @@
+@import '../../scss/z-indexes';
+@import '../../scss/const';
+
 .Header {
-    $height: 3rem;
+    z-index: $zIndex-header;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
 
     display: flex;
     flex-flow: row nowrap;
@@ -7,11 +15,11 @@
     background: var(--color-primary);
     color: white;
 
-    height: $height;
+    height: $header-height;
 
     &-Hamburger {
-        width: $height;
-        height: $height;
+        width: $header-height;
+        height: $header-height;
         line-height: 0;
 
         background: transparent;

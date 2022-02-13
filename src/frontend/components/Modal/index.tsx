@@ -1,41 +1,39 @@
 import * as React from 'react';
+import type { IAnimatedComponentProps, IAnimateVisibilityStyleObject } from '@components/withAnimateVisibility';
+import withAnimateVisibility from '@components/withAnimateVisibility';
+import Overlay from '@components/Overlay';
+import { root__scrollDisable } from '@components/Root/const';
 
-import { cnModal, modalOverlayCn, modalWindowCn } from './const';
+import { cnModal, modalWindowCn } from './const';
 
 import './Modal.scss';
 
-type IModalProps = React.PropsWithChildren<{
-    visible: boolean;
-    setVisible: (visible: boolean) => void;
-}>;
+type IModalProps = React.PropsWithChildren<IAnimatedComponentProps & IAnimateVisibilityStyleObject>;
 
-const Modal: React.FC<IModalProps> = props => {
-    const modalRoot = React.createRef<HTMLDivElement>();
+const Modal: React.FC<IModalProps> = ({ visible, animateStyles, setVisible, children }) => {
+    const closeModal = React.useMemo(() => () => setVisible(false), [setVisible]);
 
-    const closeModal = React.useCallback(() => {
-        if (!modalRoot.current) return;
-
-        const root = modalRoot.current;
-
-        root.classList.add('Modal_closing');
-        root.addEventListener('animationend', () => {
-            props.setVisible(false);
-        });
-    }, [modalRoot]);
-
-    if (!props.visible) return null;
+    React.useEffect(() => {
+        document.body.classList.toggle(root__scrollDisable, visible);
+    });
    
     return (
-        <div
-            ref={modalRoot}
-            className={cnModal()}
-        >
-            <div className={modalOverlayCn} onClick={closeModal} />
-            <div className={modalWindowCn}>
-                {props.children}
+        <div className={cnModal()}>
+            <Overlay
+                visible={visible}
+                setVisible={setVisible}
+                onClick={closeModal}
+            />
+            <div className={modalWindowCn} style={animateStyles}>
+                {children}
             </div>
         </div>
     );
 };
 
-export default Modal;
+export default withAnimateVisibility(Modal, {
+    inName: 'fadeInUp',
+    outName: 'fadeOutDown',
+    duration: 500,
+    hard: true,
+});

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import isClient from '../../utils/isClient';
 
 type IAuthButtonProps = {
     bot: string;

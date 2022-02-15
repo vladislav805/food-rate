@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 
 import type { IList } from '@typings';
 import type { IRestaurant } from '@typings/objects';
-import AuthButton from '@components/AuthButton';
 import GlobalContext from '@components/GlobalContext';
 import { useFetch } from '@utils/useFetch';
 import { fetchers } from '../../pages@client';
@@ -22,7 +21,6 @@ const HomePage: React.FC = () => {
     return (
         <div>
             <p>Home page</p>
-            {!globalContext.user ? <AuthButton bot="FoodRateBot" /> : null}
             {result?.restaurants?.items.map(restaurant => (
                 <div key={restaurant.id}>
                     <Link to={`/restaurant/${restaurant.id}`}>{restaurant.title}</Link>

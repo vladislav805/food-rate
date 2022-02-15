@@ -13,7 +13,11 @@ type IMenuItem = {
     path: string;
     icon: string;
     title: string;
+} | {
+    placeholder: MenuPlaceholderName;
 };
+
+export type MenuPlaceholderName = 'authorize';
 
 export default function useMenuItems(): IMenuItem[] {
     const context = React.useContext(GlobalContext);
@@ -31,6 +35,9 @@ export default function useMenuItems(): IMenuItem[] {
                 path: '/map',
                 icon: mdiMapSearch,
                 title: 'Карта заведений',
+            },
+            !user && {
+                placeholder: 'authorize',
             },
             {
                 path: '/search',

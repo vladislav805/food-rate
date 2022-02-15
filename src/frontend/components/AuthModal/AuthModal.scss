@@ -1,0 +1,19 @@
+.AuthModal {
+    &-Item {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+
+        padding: .6rem 1rem;
+
+        text-decoration: none;
+        color: #5d5d5d;
+    }
+
+    &-Icon {
+        width: 2rem;
+        height: 2rem;
+
+        margin-right: 1rem;
+    }
+}

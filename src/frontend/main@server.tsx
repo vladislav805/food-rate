@@ -8,25 +8,21 @@ import { matchRoutes } from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
 
 import { getUserContextByHash, UserContext } from '@database/UserContext';
-import { ITelegramAuthResult } from '@utils/telegram.typings';
-import isValidTelegramHash from '@utils/isValidTelegramHash';
-import { setCookie } from '@utils/setCookie';
-import { MONTH } from '@utils/date';
 
 import { handleApiRequest } from '@frontend/api';
 import routes, { Route } from '@frontend/routes';
 import { getDataByRoute } from '@frontend/pages@server';
+import authorize from '@frontend/external/authorize';
 import { renderFullPage } from '@utils/renderFullPage';
 
 import Root from '@components/Root';
 import type { IGlobalContext } from '@components/GlobalContext';
 import { ServerInitialDataContext } from '@components/ServerInitialDataContext';
+import { COOKIE_NAME_AUTH_HASH } from '@frontend/const';
 
 const getUserContext = (request: express.Request): UserContext => {
     return (request as unknown as { ctx: UserContext }).ctx;
 };
-
-const COOKIE_NAME_AUTH_HASH = 'auth_hash';
 
 const service = express();
 
@@ -52,36 +48,7 @@ service.all('/api/v1/:method', (req, res) => {
     });
 });
 
-const supportedProviders: string[] = ['telegram'];
-
-service.get('/auth/:provider', async(req, res) => {
-    const provider = req.params.provider;
-
-    if (!supportedProviders.includes(provider)) {
-        res.send('not supported provider');
-        return;
-    }
-
-    const query = req.query as unknown as ITelegramAuthResult;
-
-    if (!isValidTelegramHash(query, process.env.TELEGRAM_BOT_SECRET as string)) {
-        res.send('invalid hash');
-        return;
-    }
-
-    const context = getUserContext(req);
-
-    const auth = await context.createAuth({ telegramId: Number(query.id), name: `${query.first_name} ${query.last_name ?? ''}`.trim() });
-
-    res.statusCode = 302;
-    setCookie(res, COOKIE_NAME_AUTH_HASH, auth.hash, {
-        HttpOnly: true,
-        Path: '/',
-        Expires: Date.now() + (4 * MONTH * 1000),
-    });
-    res.setHeader('Location', '/');
-    res.end();
-});
+service.get('/auth/:provider', authorize);
 
 service.get('/*', async(req, res) => {
     const activeRoutes = matchRoutes(routes, req.url!);

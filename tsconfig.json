@@ -21,7 +21,8 @@
             "@frontend/*": ["frontend/*"],
             "@components/*": ["frontend/components/*"],
             "@pages/*": ["frontend/pages/*"],
-            "%config": ["config.ts"]
+            "%config": ["config.ts"],
+            "@external/*": ["external/*"]
         },
         "types": ["react/next", "react-dom/next", "node"]
     },

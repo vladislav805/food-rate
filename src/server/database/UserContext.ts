@@ -11,6 +11,7 @@ import Branch from '@database/models/branch';
 import sequelize from '@database';
 import { createAuthHash } from '@database/createAuthHash';
 import createOffsetObject from '@server/utils/createOffsetObject';
+import type { AuthorizationServiceName, IUserInfo } from '@frontend/external/authorize/typings';
 
 export class UserContext {
     protected readonly user?: User;
@@ -39,26 +40,35 @@ export class UserContext {
         return this.user;
     }
 
+    public async findUserByService(service: AuthorizationServiceName, id: number): Promise<IUser | null> {
+        return User.findOne({
+            where: { [`${service}Id`]: id },
+        });
+    }
+
     /**
-     * Создаёт авторизацию
+     * Создаёт пользователя
      */
-    public async createAuth(params: {
-        telegramId: number;
-        name: string;
-    }): Promise<Auth> {
+    public async createUser(info: IUserInfo): Promise<IUser> {
         if (this.auth) throw new Error('Already authorized');
 
-        let user: User | null = await User.findOne({
-            where: { telegramId: params.telegramId },
-        });
+        let user = await this.findUserByService(info.service, info.id);
 
         if (!user) {
             user = await User.create({
-                telegramId: params.telegramId,
-                name: params.name,
+                [`${info.service}Id`]: info.id,
+                name: info.name,
+                photoLarge: info.photoLarge,
+                photoSmall: info.photoSmall,
                 role: 'user',
             });
         }
+
+        return user;
+    }
+
+    public async createAuth(user: IUser): Promise<Auth> {
+        if (this.auth) throw new Error('Already authorized');
 
         const hash = createAuthHash(user.id);
 
@@ -132,27 +142,6 @@ export class UserContext {
                 where: { restaurantId },
             },
         });
-    }
-
-    /**
-     * Создаёт или возвращает уже созданного пользователя
-     * @param telegramId Идентификатор Telegram
-     * @param name Имя пользователя
-     */
-    public async syncUser(telegramId: number, name: string): Promise<User> {
-        const [user, created] = await User.findOrCreate({
-            where: { name, telegramId },
-        });
-
-        return user;
-    }
-
-    /**
-     * Возвращает информацию о пользователе по идентификатору Telegram
-     * @param telegramId Идентификатор пользователя в Telegram
-     */
-    public async getByTelegramId(telegramId: number): Promise<User | null> {
-        return User.findOne({ where: { telegramId } });
     }
 
     /**

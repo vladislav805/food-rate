@@ -10,8 +10,9 @@ import Dish, { init as initDish } from './models/dish';
 import Review, { init as initReview } from './models/review';
 import Category, { init as initCategory } from '@database/models/category';
 import Branch, { init as initBranch } from '@database/models/branch';
+import config from '%config';
 
-const sequelize = new Sequelize(process.env.DATABASE_URI as string, {
+const sequelize = new Sequelize(config.DATABASE_URI as string, {
     dialect: 'mariadb',
     dialectModule: mysql2,
 });

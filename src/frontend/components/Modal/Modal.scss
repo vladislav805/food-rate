@@ -23,5 +23,9 @@
         max-height: 75vh;
 
         overflow-y: auto;
+
+        margin-bottom: 0;
+        // спасибо блядскому иоплу за его всратые еновации
+        margin-bottom: env(safe-area-inset-bottom);
     }
 }

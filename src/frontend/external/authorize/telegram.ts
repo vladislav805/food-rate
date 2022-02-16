@@ -12,7 +12,7 @@ export default class AuthorizeServiceTelegram extends AuthorizeService {
         return !this.request.query.hash;
     }
 
-    public override async getServiceUserId(): Promise<number> {
+    public override async getServiceUserId(): Promise<string> {
         return Promise.reject();
     }
 

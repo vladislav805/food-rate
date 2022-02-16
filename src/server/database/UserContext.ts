@@ -40,7 +40,7 @@ export class UserContext {
         return this.user;
     }
 
-    public async findUserByService(service: AuthorizationServiceName, id: number): Promise<IUser | null> {
+    public async findUserByService(service: AuthorizationServiceName, id: string): Promise<IUser | null> {
         return User.findOne({
             where: { [`${service}Id`]: id },
         });

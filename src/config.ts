@@ -6,6 +6,9 @@ const keys = [
     'VK_APP_TOKEN',
     'VK_API_VERSION',
     'AUTH_URL_VK_REDIRECT',
+    'GOOGLE_CLIENT_ID',
+    'GOOGLE_CLIENT_SECRET',
+    'GOOGLE_REDIRECT_URI',
 ] as const;
 
 type ConfigKey = typeof keys[number];

@@ -20,7 +20,7 @@ export default abstract class AuthorizeService {
      */
     public abstract getAuthorizeUrl(): string;
 
-    public abstract getServiceUserId(): Promise<number>;
+    public abstract getServiceUserId(): Promise<string>;
 
     public abstract getUserInfo(): Promise<IUserInfo>;
 }

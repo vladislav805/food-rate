@@ -7,6 +7,7 @@ export interface UserAttributes {
     id: number;
     telegramId?: number;
     vkId?: number;
+    googleId?: string;
     name: string;
     photoSmall?: string;
     photoLarge?: string;
@@ -18,7 +19,8 @@ type UserCreationAttributes = Optional<UserAttributes, 'id'>;
 export default class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
     declare id: number;
     declare telegramId?: number;
-    declare vkId?: number;
+    declare vkId?: number
+    declare googleId?: string;
     declare name: string;
     declare photoSmall: string;
     declare photoLarge: string;
@@ -42,6 +44,11 @@ export const init: ModelInitializer = sequelize => {
         },
         vkId: {
             type: DataTypes.BIGINT,
+            allowNull: true,
+            unique: true,
+        },
+        googleId: {
+            type: DataTypes.STRING(32),
             allowNull: true,
             unique: true,
         },

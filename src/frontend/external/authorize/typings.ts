@@ -1,11 +1,11 @@
 import * as express from 'express';
 import type AuthorizeService from './AuthorizeService';
 
-export type AuthorizationServiceName = 'telegram' | 'vk';
+export type AuthorizationServiceName = 'telegram' | 'vk' | 'google';
 
 export interface IUserInfo {
     service: AuthorizationServiceName;
-    id: number;
+    id: string;
     name: string;
     photoSmall?: string;
     photoLarge?: string;

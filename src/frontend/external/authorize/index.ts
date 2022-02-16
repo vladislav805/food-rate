@@ -1,21 +1,23 @@
 import type * as express from 'express';
 import { setCookie } from '@utils/setCookie';
 import { MONTH } from '@utils/date';
+import AuthorizeService from '@frontend/external/authorize/AuthorizeService';
 import AuthorizeServiceVK from '@frontend/external/authorize/vk';
 import AuthorizeServiceTelegram from '@frontend/external/authorize/telegram';
+import AuthorizeServiceGoogle from '@frontend/external/authorize/google';
+import Auth from '@database/models/auth';
 import { UserContext } from '@database/UserContext';
 
 import { AuthorizationServiceName, IAuthorizeServiceCtr } from './typings';
-import AuthorizeService from '@frontend/external/authorize/AuthorizeService';
-import Auth from '@database/models/auth';
 import { COOKIE_NAME_AUTH_HASH } from '@frontend/const';
 import redirect from '@utils/redirect';
 
-const supportedProviders = new Set<AuthorizationServiceName>(['telegram', 'vk']);
+const supportedProviders = new Set<AuthorizationServiceName>(['telegram', 'vk', 'google']);
 
 const services: Record<AuthorizationServiceName, IAuthorizeServiceCtr> = {
     vk: AuthorizeServiceVK,
     telegram: AuthorizeServiceTelegram,
+    google: AuthorizeServiceGoogle,
 };
 
 /**
@@ -49,6 +51,15 @@ async function createSession(authService: AuthorizeService, context: UserContext
 
 export default function(request: express.Request, response: express.Response) {
     const provider = request.params.provider;
+
+    if (provider === 'logout') {
+        setCookie(response, COOKIE_NAME_AUTH_HASH, undefined, {
+            Path: '/',
+            HttpOnly: true,
+        });
+        redirect(response, '/');
+        return;
+    }
 
     if (!isSupportedService(provider)) {
         response.send('not supported provider');

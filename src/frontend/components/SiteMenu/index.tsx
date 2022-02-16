@@ -6,7 +6,6 @@ import Overlay from '@components/Overlay';
 import { root__menuOpened } from '@components/Root/const';
 import useMenuItems from '@components/SiteMenu/items';
 import AuthModal from '@components/AuthModal';
-import GlobalContext from '@components/GlobalContext';
 
 import { siteMenuCn, siteMenuItemCn, siteMenuItemIconCn, siteMenuItemTitleCn } from './const';
 
@@ -62,6 +61,22 @@ const SiteMenu: React.FC<ISiteMenuProps> = ({ visible, setVisible }) => {
                 {items.map(item => {
                     if ('placeholder' in item) {
                         return item.placeholder === 'authorize' ? authButton : null;
+                    }
+
+                    if (item.standard) {
+                        return (
+                            <a
+                                className={siteMenuItemCn}
+                                key={item.path}
+                                href={item.path}
+                            >
+                                <Icon
+                                    className={siteMenuItemIconCn}
+                                    path={item.icon}
+                                />
+                                <span className={siteMenuItemTitleCn}>{item.title}</span>
+                            </a>
+                        );
                     }
 
                     return (

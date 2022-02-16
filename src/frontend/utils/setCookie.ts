@@ -10,8 +10,12 @@ type ISetCookieOptions = Partial<{
     SameSite: 'Strict' | 'Lax' | 'None';
 }>;
 
-export function setCookie(res: express.Response, name: string, value: string, options: ISetCookieOptions = {}): void {
-    const headerValue: string[] = [`${name}=${decodeURIComponent(value)}`];
+export function setCookie(res: express.Response, name: string, value: string | undefined, options: ISetCookieOptions = {}): void {
+    const headerValue: string[] = [`${name}=${value ? decodeURIComponent(value) : ''}`];
+
+    if (value === undefined && !options.Expires) {
+        options.Expires = 'Thu, 01 Jan 1970 00:00:01 GMT';
+    }
 
     if (options.Expires) {
         let date: string;

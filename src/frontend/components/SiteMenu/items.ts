@@ -5,14 +5,16 @@ import {
     mdiCommentTextOutline,
     mdiHamburger,
     mdiHamburgerPlus,
+    mdiLogoutVariant,
     mdiMagnify,
-    mdiMapSearch,
+    mdiMapSearch
 } from '@mdi/js';
 
 type IMenuItem = {
     path: string;
     icon: string;
     title: string;
+    standard?: boolean;
 } | {
     placeholder: MenuPlaceholderName;
 };
@@ -58,6 +60,12 @@ export default function useMenuItems(): IMenuItem[] {
                 path: `/restaurant/new`,
                 icon: mdiHamburgerPlus, // todo
                 title: 'Добавить заведение',
+            },
+            user && {
+                path: '/auth/logout',
+                icon: mdiLogoutVariant,
+                title: 'Выход',
+                standard: true,
             },
         ].filter(Boolean) as IMenuItem[];
     }, [context.user]);

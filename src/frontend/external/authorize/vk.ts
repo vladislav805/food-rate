@@ -17,9 +17,9 @@ export default class AuthorizeServiceVK extends AuthorizeService {
         return !this.request.query.code;
     }
 
-    public override async getServiceUserId(): Promise<number> {
+    public override async getServiceUserId(): Promise<string> {
         this.auth = await VkServer.getAuthorizationInfoByCode(this.request.query.code as string);
-        return this.auth.user_id;
+        return String(this.auth.user_id);
     }
 
     public override async getUserInfo(): Promise<IUserInfo> {
@@ -29,7 +29,7 @@ export default class AuthorizeServiceVK extends AuthorizeService {
 
         return {
             service: 'vk',
-            id: user.id,
+            id: String(user.id),
             name: `${user.first_name} ${user.last_name}`,
             photoSmall: user.photo_100,
             photoLarge: user.photo_200,

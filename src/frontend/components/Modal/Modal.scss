@@ -18,7 +18,7 @@
 
     &-Window {
         z-index: #{$zIndex-modal + 5};
-        background: white;
+        background: var(--color-background);
 
         max-height: 75vh;
 

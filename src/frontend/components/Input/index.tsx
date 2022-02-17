@@ -25,9 +25,7 @@ const Input: React.FC<IInputProps> = props => {
         setValue((event.target as HTMLInputElement).value);
     }, []);
 
-    const classNameReady = React.useMemo(() => {
-        return cnInput(null, [className]);
-    }, [className]);
+    const classNameReady = React.useMemo(() => cnInput(null, [className]), [className]);
 
     if (type === 'textarea') {
         return (
@@ -46,6 +44,7 @@ const Input: React.FC<IInputProps> = props => {
                 {...rest}
                 value={value}
                 onChange={onChange}
+                autoComplete="off"
             />
         );
     }

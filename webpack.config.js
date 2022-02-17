@@ -5,6 +5,7 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const mode = isProduction ? 'production' : 'development';
+const isPublicMode = process.env.PUBLIC === '1';
 
 module.exports = {
     mode,
@@ -66,7 +67,7 @@ module.exports = {
     devtool: 'eval',
     devServer: {
         host: '0.0.0.0',
-        port: 1111,
+        port: isPublicMode ? 6789 : 1111,
         allowedHosts: 'all',
         hot: true,
         liveReload: true,
@@ -76,6 +77,9 @@ module.exports = {
                 router: () => 'http://localhost:1112',
                 logLevel: 'debug' /*optional*/
             }
-        }
+        },
+        client: isPublicMode ? {
+            webSocketURL: 'ws://desktop.mirror.velu.ga/ws',
+        } : undefined,
     },
 };

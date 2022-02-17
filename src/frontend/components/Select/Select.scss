@@ -1,0 +1,74 @@
+.Select {
+    &-Value {
+        position: relative;
+        display: block;
+
+        padding: .25rem 1.65rem .25rem .5rem;
+
+        text-align: left;
+
+        width: 100%;
+
+        background: transparent;
+
+        border: 2px solid var(--input-border);
+        border-radius: 4px;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &::after {
+            content: '';
+            display: block;
+
+            position: absolute;
+
+            top: .75rem;
+            right: .5rem;
+
+            width: 0;
+            height: 0;
+
+            border: 7px solid transparent;
+            border-top-color: var(--input-border);
+        }
+    }
+
+    &-Item {
+        position: relative;
+        display: block;
+        width: 100%;
+
+        padding: .25rem 1.65rem;
+
+        background: transparent;
+
+        &_active {
+            &::before {
+                content: '';
+                position: absolute;
+
+                top: .3rem;
+                right: .5rem;
+
+                background: var(--input-border);
+
+                width: 16px;
+                height: 16px;
+
+                clip-path: polygon(15% 40%, 0 55%, 45% 100%, 100% 40%, 85% 24%, 45% 70%);
+            }
+        }
+
+        &Icon {
+            position: absolute;
+
+            top: .3rem;
+            left: .5rem;
+
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

@@ -3,14 +3,15 @@ import type { IAnimatedComponentProps, IAnimateVisibilityStyleObject } from '@co
 import withAnimateVisibility from '@components/withAnimateVisibility';
 import Overlay from '@components/Overlay';
 import { root__scrollDisable } from '@components/Root/const';
+import type { IClassNameProps } from '@frontend/typings';
 
-import { cnModal, modalWindowCn } from './const';
+import { cnModal, cnModalWindow } from './const';
 
 import './Modal.scss';
 
-type IModalProps = React.PropsWithChildren<IAnimatedComponentProps & IAnimateVisibilityStyleObject>;
+type IModalProps = React.PropsWithChildren<IAnimatedComponentProps & IAnimateVisibilityStyleObject & IClassNameProps>;
 
-const Modal: React.FC<IModalProps> = ({ visible, animateStyles, setVisible, children }) => {
+const Modal: React.FC<IModalProps> = ({ visible, animateStyles, setVisible, children, className }) => {
     const closeModal = React.useMemo(() => () => setVisible(false), [setVisible]);
 
     React.useEffect(() => {
@@ -24,7 +25,7 @@ const Modal: React.FC<IModalProps> = ({ visible, animateStyles, setVisible, chil
                 setVisible={setVisible}
                 onClick={closeModal}
             />
-            <div className={modalWindowCn} style={animateStyles}>
+            <div className={cnModalWindow(null, [className])} style={animateStyles}>
                 {children}
             </div>
         </div>

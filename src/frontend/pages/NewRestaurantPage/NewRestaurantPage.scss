@@ -1,0 +1,9 @@
+@import '../../scss/const';
+
+.NewRestaurantPage {
+    padding: 0 $default-padding-horizontal;
+
+    &-Submit {
+        margin-top: 1rem;
+    }
+}

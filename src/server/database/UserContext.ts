@@ -4,7 +4,7 @@ import type { IDish, IReview, IUser } from '@typings/objects';
 import Auth from '@database/models/auth';
 import User from '@database/models/user';
 import Category from '@database/models/category';
-import Restaurant from '@database/models/restaurant';
+import Restaurant, { RestaurantType } from '@database/models/restaurant';
 import Dish from '@database/models/dish';
 import Review from '@database/models/review';
 import Branch from '@database/models/branch';
@@ -111,6 +111,11 @@ export class UserContext {
     }
 
     /**
+     *
+     * Категории
+     *
+     */
+    /**
      * Возвращает список категорий
      */
     public async getCategories(): Promise<IList<Category>> {
@@ -145,6 +150,11 @@ export class UserContext {
     }
 
     /**
+     *
+     * Пользователи
+     *
+     */
+    /**
      * Возвращает информацию о пользователе по идентификатору
      * @param userId Идентификатор пользователя
      */
@@ -177,7 +187,17 @@ export class UserContext {
     }
 
     /**
-     * Возвращает список ресторанов/кафе
+     *
+     * Заведения
+     *
+     */
+    /**
+     * Поля, которые не нужны при получении списка заведений
+     */
+    protected static readonly RESTAURANT_EXTRA_FIELDS: (keyof Restaurant)[] = ['instagram', 'vk', 'createdAt', 'updatedAt'];
+
+    /**
+     * Возвращает список заведений
      * @param limit Максимальное количество, которое нужно вернуть
      * @param offset Сдвиг выборки
      */
@@ -185,6 +205,9 @@ export class UserContext {
         const { count, rows } = await Restaurant.findAndCountAll({
             limit,
             offset,
+            attributes: {
+                exclude: UserContext.RESTAURANT_EXTRA_FIELDS,
+            },
         });
 
         return {
@@ -195,19 +218,24 @@ export class UserContext {
     }
 
     /**
-     * Создаёт ресторан/кафе
-     * @param title Название ресторана/кафе
-     * @param description Описание
+     * Создаёт заведение
+     * @param params Информация о заведении
      */
-    public async addRestaurant(title: string, description: string): Promise<Restaurant> {
+    public async addRestaurant(params: {
+        title: string;
+        type: RestaurantType;
+        description: string;
+        instagram: string;
+        vk: string;
+    }): Promise<Restaurant> {
         if (!this.user) throw new Error('Access denied');
 
-        return Restaurant.create({ title, description });
+        return Restaurant.create(params);
     }
 
     /**
-     * Возврщает ресторан/кафе по его идентификатору
-     * @param restaurantId Идентификатор ресторана/кафе, информацию о котором нужно вернуть
+     * Возврщает заведение по его идентификатору
+     * @param restaurantId Идентификатор заведения, информацию о котором нужно вернуть
      */
     public getRestaurantById(restaurantId: number): Promise<Restaurant | null> {
         return Restaurant.findOne({ where: { id: restaurantId } });
@@ -263,6 +291,11 @@ export class UserContext {
         };
     }
 
+    /**
+     *
+     * Филиалы заведений
+     *
+     */
     /**
      * Возвращает информацию о филиалах ресторана/кафе
      * @param restaurantId Идентификатор заведения, филиалы которого нужно вернуть

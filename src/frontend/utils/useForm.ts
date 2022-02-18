@@ -71,11 +71,14 @@ const serializeForm = <T extends Record<string, string | number | boolean | unde
 };
 
 export default function useForm<T extends Record<string, string | boolean | number | undefined>>(form: React.RefObject<HTMLFormElement>) {
-    return React.useMemo(() => ({
-        getValues: (): T => {
-            return form.current
-                ? serializeForm<T>(form.current)
-                : {} as T;
-        },
-    }), [form]);
+    return React.useMemo(() => {
+        console.log('useForm', form.current)
+        return ({
+            getValues: (): T => {
+                return form.current
+                    ? serializeForm<T>(form.current)
+                    : {} as T;
+            }
+        });
+    }, [form.current]);
 }

@@ -37,38 +37,36 @@
 
     &-Item {
         position: relative;
-        display: block;
+        display: grid;
         width: 100%;
 
-        padding: .25rem 1.65rem;
+        grid-template-columns: 2rem 1fr 2rem;
+
+        padding: .75rem .25rem;
+        font-size: 1rem;
 
         background: transparent;
 
         &_active {
-            &::before {
-                content: '';
-                position: absolute;
-
-                top: .3rem;
-                right: .5rem;
-
-                background: var(--input-border);
-
-                width: 16px;
-                height: 16px;
-
-                clip-path: polygon(15% 40%, 0 55%, 45% 100%, 100% 40%, 85% 24%, 45% 70%);
-            }
+            color: var(--color-primary);
         }
 
         &Icon {
-            position: absolute;
+            grid-column: 1 / 2;
+        }
 
-            top: .3rem;
-            left: .5rem;
+        &Title {
+            grid-column: 2 / 3;
+        }
 
-            width: 16px;
-            height: 16px;
+        &ActiveIcon {
+            grid-column: 3 / 4;
+        }
+
+        &Icon,
+        &ActiveIcon {
+            width: 1.4rem;
+            height: 1.4rem;
         }
     }
 }

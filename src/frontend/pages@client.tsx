@@ -5,6 +5,7 @@ import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
+import { RestaurantType } from '@database/models/restaurant';
 
 type Params = Record<string, string | number | boolean>;
 type TrueParams = Record<string, string>;
@@ -71,7 +72,7 @@ export const fetchers = {
         return apiRequest<boolean>('deleteReview', params);
     },
 
-    addRestaurant: async(params: { title: string; description: string }) => {
+    addRestaurant: async(params: { title: string; description: string; type: RestaurantType; vk: string; instagram: string }) => {
         return apiRequest<IRestaurant>('addRestaurant', params);
     },
 };

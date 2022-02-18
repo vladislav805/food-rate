@@ -1,9 +1,16 @@
 import * as React from 'react';
 import Icon from '@mdi/react';
-import { selectCn, cnSelectItem, selectValueCn, selectItemIconCn } from '@components/Select/const';
+import {
+    selectCn,
+    cnSelectItem,
+    selectValueCn,
+    selectItemIconCn,
+    selectItemActiveIconCn, selectItemTitleCn
+} from '@components/Select/const';
 import Modal from '@components/Modal';
 
 import './Select.scss';
+import { mdiCheckBold } from '@mdi/js';
 
 type ISelectProps<T extends string | number = string | number> = {
     items: ISelectItem<T>[];
@@ -82,7 +89,10 @@ const Item: React.FC<IItemProps> = ({ item, active, onChangeValue }) => {
                     className={selectItemIconCn}
                 />
             )}
-            {item.title}
+            <span className={selectItemTitleCn}>{item.title}</span>
+            {active && (
+                <Icon path={mdiCheckBold} className={selectItemActiveIconCn} />
+            )}
         </button>
     );
 };

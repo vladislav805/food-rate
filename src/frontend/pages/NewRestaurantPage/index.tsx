@@ -1,5 +1,4 @@
 import * as React from 'react';
-import useForm from '@utils/useForm';
 import withLabel from '@components/withLabel';
 import Input from '@components/Input';
 import Button from '@components/Button';
@@ -14,11 +13,6 @@ import './NewRestaurantPage.scss';
 const InputWithLabel = withLabel(Input);
 const SelectWithLabel = withLabel(Select);
 
-type IFormParams = {
-    title: string;
-    description: string;
-};
-
 const types: ISelectItem<RestaurantType>[] = [
     { value: 'place', title: 'только места' },
     { value: 'delivery', title: 'только доставка' },
@@ -29,31 +23,27 @@ const types: ISelectItem<RestaurantType>[] = [
  * TODO: Добавить обработку ошибок
  */
 const NewRestaurantPage: React.FC = () => {
-    const ref = React.createRef<HTMLFormElement>();
-    const form = useForm<IFormParams>(ref);
-
     const [busy, setBusy] = React.useState<boolean>(false);
     const [title, setTitle] = React.useState<string>('');
     const [description, setDescription] = React.useState<string>('');
     const [type, setType] = React.useState<RestaurantType>('place');
+    const [vk, setVk] = React.useState<string>('');
+    const [instagram, setInstagram] = React.useState<string>('');
 
     const navigate = useNavigate();
 
     const onSubmit = React.useCallback((event: React.FormEvent) => {
         event.preventDefault();
 
-        const params = form.getValues();
-
         setBusy(true);
 
-        fetchers.addRestaurant(params).then(restaurant => {
+        fetchers.addRestaurant({ title, description, type, vk, instagram }).then(restaurant => {
             navigate(`/restaurant/${restaurant.id}`);
         });
-    }, [form]);
+    }, [title, description, type, vk, instagram]);
 
     return (
         <form
-            ref={ref}
             onSubmit={onSubmit}
             className={newRestaurantPageCn}
         >
@@ -81,6 +71,26 @@ const NewRestaurantPage: React.FC = () => {
                 setValue={setType as SelectChanger}
                 id="type"
                 label="Тип заведения"
+            />
+            <InputWithLabel
+                type="url"
+                label="Сообщество в ВКонтакте (необязательно)"
+                name="vk"
+                id="vk"
+                value={vk}
+                setValue={setVk}
+                readOnly={busy}
+                placeholder="https://vk.com/..."
+            />
+            <InputWithLabel
+                type="url"
+                label="Аккаунт в Instagram (необязательно)"
+                name="instagram"
+                id="instagram"
+                value={instagram}
+                setValue={setInstagram}
+                readOnly={busy}
+                placeholder="https://instagram.com/..."
             />
             <Button
                 className={newRestaurantPageSubmitCn}

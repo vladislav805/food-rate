@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "es6",
+        "module": "CommonJS",
         "moduleResolution": "node",
         "target": "esnext",
         "jsx": "react",

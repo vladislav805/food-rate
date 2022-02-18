@@ -1,6 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -58,13 +59,29 @@ module.exports = {
             new TsconfigPathsPlugin(),
         ],
     },
+    optimization: {
+        minimize: isProduction,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    ie8: false,
+                    keep_fnames: false,
+                    compress: true,
+                    mangle: {
+                        toplevel: true,
+                    },
+                },
+                extractComments: false,
+            }),
+        ]
+    },
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'styles.css',
         }),
     ],
     stats: 'minimal',
-    devtool: 'eval',
+    devtool: isProduction ? false : 'eval',
     devServer: {
         host: '0.0.0.0',
         port: isPublicMode ? 6789 : 1111,

@@ -17,7 +17,7 @@ module.exports = {
                     {
                         loader: 'ts-loader',
                         options: {
-                            configFile: 'tsconfig.production.json',
+                            configFile: 'tsconfig@server.json',
                         },
                     },
                 ],

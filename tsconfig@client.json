@@ -2,7 +2,10 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "lib": ["es6", "es7", "es2020", "DOM"],
-        "outDir": "dist"
+        "outDir": "dist",
+        "module": "es6",
+        "target": "es2019",
+        "jsx": "preserve"
     },
     "include": [
         "src/**/*"
@@ -10,5 +13,5 @@
     "exclude": [
         "src/tests/*",
         "**/*.scss"
-    ],
+    ]
 }

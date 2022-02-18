@@ -1,0 +1,15 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "module": "CommonJS",
+        "lib": ["es6", "es7", "es2020", "DOM"],
+        "outDir": "dist"
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "src/tests/*",
+        "**/*.scss"
+    ]
+}

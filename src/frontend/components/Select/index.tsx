@@ -1,21 +1,24 @@
 import * as React from 'react';
 import Icon from '@mdi/react';
-import {
-    selectCn,
-    cnSelectItem,
-    selectValueCn,
-    selectItemIconCn,
-    selectItemActiveIconCn, selectItemTitleCn
-} from '@components/Select/const';
+import { mdiCheckBold } from '@mdi/js';
 import Modal from '@components/Modal';
 
+import {
+    cnSelect,
+    cnSelectItem,
+    selectItemActiveIconCn,
+    selectItemIconCn,
+    selectItemTitleCn,
+    selectValueCn,
+} from './const';
+
 import './Select.scss';
-import { mdiCheckBold } from '@mdi/js';
 
 type ISelectProps<T extends string | number = string | number> = {
     items: ISelectItem<T>[];
     value: T;
     setValue: SelectChanger<T>;
+    inline?: boolean
 };
 
 export type SelectChanger<T extends string | number = string | number> = (value: T) => void;
@@ -27,7 +30,7 @@ export type ISelectItem<T extends string | number = string | number> = {
 };
 
 const Select: React.FC<ISelectProps> = props => {
-    const { items, value, setValue } = props;
+    const { items, value, setValue, inline } = props;
     const [visible, setVisible] = React.useState<boolean>(false);
 
     const { show } = React.useMemo(() => ({
@@ -44,7 +47,7 @@ const Select: React.FC<ISelectProps> = props => {
     const selectedItem = React.useMemo(() => items.find(item => item.value === value)?.title, [items, value]);
 
     return (
-        <div className={selectCn}>
+        <div className={cnSelect({ inline })}>
             <button
                 type="button"
                 className={selectValueCn}

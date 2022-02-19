@@ -1,4 +1,8 @@
 .Select {
+    &_inline {
+        display: inline-block;
+    }
+
     &-Value {
         position: relative;
         display: block;

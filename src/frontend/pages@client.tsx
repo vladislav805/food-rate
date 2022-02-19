@@ -22,7 +22,7 @@ async function request<T>(url: string, params: Params = {}): Promise<T> {
     return request.json();
 }
 
-async function apiRequest<T>(method: string, params: Params): Promise<T> {
+async function apiRequest<T>(method: string, params: Params = {}): Promise<T> {
     const request = await fetch(`/api/v1/${method}`, {
         mode: 'cors',
         method: 'post',
@@ -67,9 +67,11 @@ export const fetchers = {
      *
      */
 
-    getCategories: async() => {
-        return apiRequest<IList<ICategory>>('getCategories', {});
-    },
+    getCategories: async() => apiRequest<IList<ICategory>>('getCategories'),
+
+    addCategory: async(params: { title: string }) => apiRequest<ICategory>('addCategory', params),
+
+    deleteCategory: async(params: { categoryId: number }) => apiRequest<boolean>('deleteCategory', params),
 
     addDish: async(params: { restaurantId: number; title: string; description: string; categoryId: number }) => {
         return apiRequest<IDish>('addDish', params);

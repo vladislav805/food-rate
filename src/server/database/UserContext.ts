@@ -135,6 +135,18 @@ export class UserContext {
     }
 
     /**
+     * Удаляет категорию по её идентификатору
+     * @param categoryId Идентификатор категории
+     */
+    public async deleteCategory(categoryId: number): Promise<boolean> {
+        if (!this.user) throw new Error('Access denied');
+
+        const result = await Category.destroy({ where: { id: categoryId } });
+
+        return result > 0;
+    }
+
+    /**
      * Возвращает список из категорий, блюда которых представлены в конкретном ресторане/кафе
      * @param restaurantId Идентификатор ресторана, для которого нужно вернуть категории
      */

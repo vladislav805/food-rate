@@ -1,0 +1,16 @@
+@import '../../scss/const';
+
+.CategoriesPage {
+    &-Header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: .25rem $default-padding-horizontal;
+    }
+
+    &-Items {
+
+    }
+}

@@ -15,3 +15,4 @@ export * from './deleteReview';
 // Category
 export * from './getCategories';
 export * from './addCategory';
+export * from './deleteCategory';

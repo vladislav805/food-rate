@@ -10,6 +10,7 @@ type FetchHookState<T> =
 
 type FetchHookResult<T> = FetchHookState<T> & {
     reload: () => void;
+    setResult: (result: T) => void;
 };
 
 export const useFetch = <T>(key: string, fetch: FetchFunction<T>, args: Record<string, string> = {}): FetchHookResult<T> => {
@@ -28,6 +29,8 @@ export const useFetch = <T>(key: string, fetch: FetchFunction<T>, args: Record<s
         loading: false,
     });
 
+    const setResult = React.useCallback((result: T) => setState({ result, loading: false }), []);
+
     React.useEffect(() => {
         if (state.result !== undefined) return;
 
@@ -38,5 +41,6 @@ export const useFetch = <T>(key: string, fetch: FetchFunction<T>, args: Record<s
         loading: state.loading,
         result: state.result,
         reload: makeRequest,
+        setResult,
     } as FetchHookResult<T>;
 };

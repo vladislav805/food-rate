@@ -6,9 +6,9 @@ export const addCategory: Endpoint = (context, request) => {
 
     if (!user || !hasUserRights(user, 'admin')) throw new Error('Access denied');
 
-    const title = String(request.query.title ?? '').trim();
+    const title = String(request.body.title ?? '').trim();
 
     if (!title) throw new Error('Title cannot be empty');
 
-    return context.createCategory(title as string);
+    return context.createCategory(title);
 };

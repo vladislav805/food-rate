@@ -7,6 +7,8 @@ type IFullPageOptions = {
     initialData?: any;
 };
 
+const safeJsonStringify = (data: any) => JSON.stringify(data).replace(/</g, '\\u003c');
+
 export const renderFullPage = (markup: string, meta: IFullPageOptions): string => {
     const { documentTitle, key, initialData, globalContext } = meta;
 
@@ -21,8 +23,8 @@ export const renderFullPage = (markup: string, meta: IFullPageOptions): string =
     <body>
         <div id="Root">${markup}</div>    
         <script>
-            window.__context__=${JSON.stringify(globalContext)};
-            window.__initial__=${JSON.stringify({ key, data: initialData })};
+            window.__context__=${safeJsonStringify(globalContext)};
+            window.__initial__=${safeJsonStringify({ key, data: initialData })};
         </script> 
         <script src="/static/index.js"></script>
     </body>

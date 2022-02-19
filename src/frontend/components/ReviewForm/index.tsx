@@ -4,7 +4,6 @@ import StarRating from '@components/StarRating';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import withLabel from '@components/withLabel';
-import useForm from '@utils/useForm';
 import { fetchers } from '@frontend/pages@client';
 
 import {
@@ -23,11 +22,6 @@ type IReviewFormProps = {
     onReviewPublished: (review: IReview) => void;
 };
 
-type IFormFields = {
-    text: string;
-    rate: number;
-};
-
 type IFormError = {
     text: string;
 };
@@ -38,26 +32,22 @@ const StarRatingWithLabel = withLabel(StarRating);
 const ReviewForm: React.FC<IReviewFormProps> = props => {
     const { dishId, onReviewPublished } = props;
 
-    const refForm = React.createRef<HTMLFormElement>();
-    const form = useForm<IFormFields>(refForm);
-
     const [error, setError] = React.useState<IFormError | undefined>();
     const [busy, setBusy] = React.useState<boolean>(false);
     const [rate, setRate] = React.useState<number | null>(null);
     const [text, setText] = React.useState<string>('');
 
-    const onSubmit  = (event: React.FormEvent) => {
+    const onSubmit = React.useCallback((event: React.FormEvent) => {
         event.preventDefault();
-        const params = form.getValues();
 
-        if (!params.rate) {
+        if (!rate) {
             setError({ text: 'Вы не поставили оцнеку!' });
             return;
         }
 
         setBusy(true);
 
-        fetchers.addReview({ dishId, ...params })
+        fetchers.addReview({ dishId, rate, text })
             .then(review => {
                 onReviewPublished(review);
                 setRate(null);
@@ -65,13 +55,13 @@ const ReviewForm: React.FC<IReviewFormProps> = props => {
             })
             .catch(error => setError(error))
             .then(() => setBusy(false));
-    };
+    }, [rate, text]);
 
     return (
         <form
-            ref={refForm}
             onSubmit={onSubmit}
-            className={reviewFormCn}>
+            className={reviewFormCn}
+        >
             <div className={reviewFormContentCn}>
                 <StarRatingWithLabel
                     className={reviewFormRatingCn}

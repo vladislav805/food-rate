@@ -1,4 +1,4 @@
-import { Endpoint } from '@frontend/api';
+import type { Endpoint } from '@frontend/api';
 
 export const reviews: Endpoint = (context, request) => {
     const { dishId, offset, limit } = request.query;

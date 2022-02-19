@@ -3,11 +3,12 @@ import type { IList } from '@typings';
 import type { ICategory, IDish, IRestaurant } from '@typings/objects';
 import GlobalContext from '@components/GlobalContext';
 import Dish from '@components/Dish';
+import CategoryList from '@components/CategoryList';
+import Select, { ISelectItem, SelectChanger } from '@components/Select';
 
-import { dishListCn, dishListControlsCn, dishListItemsCn } from './const';
+import { dishListCn, dishListControlsCn, dishListItemsCn, dishListFiltersCn } from './const';
 import { DishFilter, dishFilters, RateState } from './filters';
 import { dishSort, SortType } from './sort';
-import CategoryList from '@components/CategoryList';
 
 type IDishListProps = {
     restaurant: IRestaurant;
@@ -15,12 +16,35 @@ type IDishListProps = {
     categories?: ICategory[];
 };
 
+const filterItems: ISelectItem[] = [
+    { title: 'Всё', value: '' },
+    { title: 'Оценено мной', value: RateState.RATED },
+    { title: 'Не оценено мной', value: RateState.NOT_RATED },
+];
+
+const minRatingItems: ISelectItem[] = [
+    { title: 'Любая оценка', value: 0 },
+    { title: '5 и выше', value: 5 },
+    { title: '6 и выше', value: 6 },
+    { title: '7 и выше', value: 7 },
+    { title: '8 и выше', value: 8 },
+    { title: '9 и выше', value: 9 },
+    { title: '9.5 и выше', value: 9.5 },
+];
+
+const sortItems: ISelectItem[] = [
+    { title: 'по дате добавления (сначала ранние)', value: SortType.ID_ASC },
+    { title: 'по дате добавления (сначала поздние)', value: SortType.ID_DESC },
+    { title: 'по рейтингу (сначала худшие)', value: SortType.RATING_ASC },
+    { title: 'по рейтингу (сначала лучшие)', value: SortType.RATING_DESC },
+];
+
 const DishList: React.FC<IDishListProps> = ({ restaurant, dishes, categories }) => {
     const globalContext = React.useContext(GlobalContext);
     const [category, setCategory] = React.useState<ICategory | undefined>();
     const [mineRating, setMineRating] = React.useState<boolean>(false);
-    const [minRating, setMinRating] = React.useState<number | undefined>();
-    const [rateStatus, setRateStatus] = React.useState<RateState | undefined>();
+    const [minRating, setMinRating] = React.useState<number>(0);
+    const [rateStatus, setRateStatus] = React.useState<RateState | ''>('');
     const [sortType, setSortType] = React.useState<SortType>(SortType.ID_ASC);
 
     const filters = React.useMemo(() => {
@@ -42,24 +66,8 @@ const DishList: React.FC<IDishListProps> = ({ restaurant, dishes, categories }) 
     }, [dishes, filters]);
 
     const {
-        onMinRatingChange,
-        onRateStatusChange,
-        onSortChange,
         onMineRatingChange,
     } = React.useMemo(() => ({
-        onMinRatingChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-            const selectValue = (event.target as HTMLSelectElement).value;
-
-            setMinRating(!selectValue ? undefined : +selectValue);
-        },
-        onRateStatusChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-            const selectValue = (event.target as HTMLSelectElement).value;
-
-            setRateStatus(!selectValue ? undefined : selectValue as RateState);
-        },
-        onSortChange: (event: React.ChangeEvent<HTMLSelectElement>) => {
-            setSortType((event.target as HTMLSelectElement).value as SortType);
-        },
         onMineRatingChange: (event: React.ChangeEvent<HTMLInputElement>) => {
             setMineRating((event.target as HTMLInputElement).checked);
         },
@@ -75,38 +83,38 @@ const DishList: React.FC<IDishListProps> = ({ restaurant, dishes, categories }) 
                         selected={category}
                     />
                 )}
-                {globalContext.user && (
-                    <select onChange={onRateStatusChange}>
-                        <option value="">Всё</option>
-                        <option value={RateState.RATED}>оценено мной</option>
-                        <option value={RateState.NOT_RATED}>не оценено мной</option>
-                    </select>
-                )}
-                <select onChange={onMinRatingChange}>
-                    <option value="">Любая оценка</option>
-                    <option value={5}>5 и выше</option>
-                    <option value={6}>6 и выше</option>
-                    <option value={7}>7 и выше</option>
-                    <option value={8}>8 и выше</option>
-                    <option value={9}>9 и выше</option>
-                    <option value={9.5}>9.5 и выше</option>
-                </select>
-                <select onChange={onSortChange} value={sortType}>
-                    <option value={SortType.ID_ASC}>по дате добавления (сначала ранние)</option>
-                    <option value={SortType.ID_DESC}>по дате добавления (сначала поздние)</option>
-                    <option value={SortType.RATING_ASC}>по рейтингу (сначала худшие)</option>
-                    <option value={SortType.RATING_DESC}>по рейтингу (сначала лучшие)</option>
-                </select>
-                {globalContext.user && (
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={mineRating}
-                            onChange={onMineRatingChange}
+                <div className={dishListFiltersCn}>
+                    {globalContext.user && (
+                        <Select
+                            items={filterItems}
+                            value={rateStatus}
+                            setValue={setRateStatus as SelectChanger}
+                            inline
                         />
-                        мои оценки
-                    </label>
-                )}
+                    )}
+                    <Select
+                        items={minRatingItems}
+                        value={minRating}
+                        setValue={setMinRating as SelectChanger}
+                        inline
+                    />
+                    <Select
+                        items={sortItems}
+                        value={sortType}
+                        setValue={setSortType as SelectChanger}
+                        inline
+                    />
+                    {globalContext.user && (
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={mineRating}
+                                onChange={onMineRatingChange}
+                            />
+                            мои оценки
+                        </label>
+                    )}
+                </div>
             </div>
             <div className={dishListItemsCn}>
                 {readyDishItems.length ? readyDishItems.map(dish => (

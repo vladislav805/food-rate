@@ -4,10 +4,14 @@ import { Link } from 'react-router-dom';
 import type { IReview } from '@typings/objects';
 import DateFormat from '@components/DateFormat';
 import StarRatingStatic from '@components/StarRatingStatic';
+import withIntersection from '@components/Image/_withIntersection';
+import Image from '@components/Image';
 
-import { cnReview, reviewAuthorCn, reviewFooterCn, reviewHeaderCn, reviewTextCn } from './const';
+import { cnReview, reviewAuthorCn, reviewAvatarCn, reviewFooterCn, reviewTextCn } from './const';
 
 import './Review.scss';
+
+const Avatar = withIntersection(Image);
 
 type IReviewProps = {
     review: IReview;
@@ -31,12 +35,17 @@ const Review: React.FC<IReviewProps> = (props) => {
 
     return (
         <div className={cnReview()}>
-            <div className={reviewHeaderCn}>
-                <div className={reviewAuthorCn}>
-                    <Link to={`/user/${user.id}`}>{user.name}</Link>
-                </div>
-                <StarRatingStatic value={review.rate} />
+            <Avatar
+                className={reviewAvatarCn}
+                url={user.photoSmall as string}
+                alt={`Photo of ${user.name}`}
+                cover
+                circle
+            />
+            <div className={reviewAuthorCn}>
+                <Link to={`/user/${user.id}`}>{user.name}</Link>
             </div>
+            <StarRatingStatic value={review.rate} />
             <div className={reviewTextCn}>{review.text}</div>
             <div className={reviewFooterCn}>
                 <DateFormat date={review.createdAt} />

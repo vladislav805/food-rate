@@ -1,6 +1,6 @@
 import * as React from 'react';
 import type { IList } from '@typings';
-import type { IRestaurant, IReview } from '@typings/objects';
+import type { ICategory, IDish, IRestaurant, IReview } from '@typings/objects';
 import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
@@ -58,6 +58,21 @@ export const fetchers = {
 
     categories: async() => {
         return request<ICategoriesPageData>(`/categories`);
+    },
+
+
+    /**
+     *
+     * API
+     *
+     */
+
+    getCategories: async() => {
+        return apiRequest<IList<ICategory>>('getCategories', {});
+    },
+
+    addDish: async(params: { restaurantId: number; title: string; description: string; categoryId: number }) => {
+        return apiRequest<IDish>('addDish', params);
     },
 
     getReviews: async(params: Record<string, number>) => {

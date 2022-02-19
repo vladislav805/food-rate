@@ -10,6 +10,8 @@ import GlobalContext from '@components/GlobalContext';
 import ReviewForm from '@components/ReviewForm';
 import Modal from '@components/Modal';
 import Button from '@components/Button';
+import ImageBase from '@components/Image';
+import withIntersection from '@components/Image/_withIntersection';
 import { fetchers } from '@frontend/pages@client';
 import { useFetch } from '@utils/useFetch';
 import { withNumericParams } from '@utils/withNumericParams';
@@ -18,13 +20,16 @@ import {
     dishPageCn,
     dishPageDescriptionCn,
     dishPageHeaderCn,
+    dishPageImageCn,
     dishPageMetaCn,
     dishPageRateButtonCn,
     dishPageRatingCn,
-    dishPageTitleCn,
+    dishPageTitleCn
 } from './const';
 
 import './DishPage.scss';
+
+const Image = withIntersection(ImageBase);
 
 export type IDishPageData = {
     restaurant: IRestaurant;
@@ -52,6 +57,15 @@ const DishPage: React.FC = () => {
     return (
         <div className={dishPageCn}>
             <div className={dishPageHeaderCn}>
+                <Image
+                    className={dishPageImageCn}
+                    url="https://placeimg.com/640/480/nature"
+                    alt="Picture"
+                    imageWidth={64}
+                    imageHeight={64}
+                    cover
+                    circle
+                />
                 <h1 className={dishPageTitleCn}>{dish.title}</h1>
                 <p className={dishPageDescriptionCn}>{dish.description}</p>
                 <p className={dishPageMetaCn}>

@@ -88,7 +88,7 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
+                    exclude: UserContext.USER_EXTRA_FIELDS,
                 },
             }],
             where: { hash },
@@ -154,12 +154,18 @@ export class UserContext {
      * Пользователи
      *
      */
+    protected static readonly USER_EXTRA_FIELDS: (keyof User)[] = ['createdAt', 'updatedAt', 'vkId', 'googleId', 'telegramId'];
     /**
      * Возвращает информацию о пользователе по идентификатору
      * @param userId Идентификатор пользователя
      */
     public getUserById(userId: number): Promise<User | null> {
-        return User.findOne({ where: { id: userId } });
+        return User.findOne({
+            attributes: {
+                exclude: UserContext.USER_EXTRA_FIELDS,
+            },
+            where: { id: userId },
+        });
     }
 
     /**
@@ -411,7 +417,7 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
+                    exclude: UserContext.USER_EXTRA_FIELDS,
                 },
             },
         });
@@ -437,7 +443,7 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
+                    exclude: UserContext.USER_EXTRA_FIELDS,
                 },
             },
         });
@@ -466,7 +472,7 @@ console.log({userId: this.user.id, dishId, rate, text});
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: ['createdAt', 'updatedAt'],
+                    exclude: UserContext.USER_EXTRA_FIELDS,
                 },
             },
         });

@@ -52,7 +52,7 @@ const Select: React.FC<ISelectProps> = props => {
                 type="button"
                 className={selectValueCn}
                 onClick={show}
-            >{selectedItem}</button>
+            >{selectedItem ?? '—'}</button>
             <Modal
                 setVisible={setVisible}
                 visible={visible}

@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import type { IList } from '@typings';
-import type { IDish, IReview, IUser } from '@typings/objects';
+import type { IDish, IRestaurant, IReview, IUser } from '@typings/objects';
 import Auth from '@database/models/auth';
 import User from '@database/models/user';
 import Category from '@database/models/category';
@@ -310,6 +310,25 @@ export class UserContext {
     }
 
     /**
+     * Возвращает заведения для подсказок
+     * @param query Поисковый запрос
+     * @param limit Максимальное количество элементов
+     */
+    public suggestRestaurants(query: string, limit: number): Promise<IRestaurant[]> {
+        return Restaurant.findAll({
+            where: {
+                title: {
+                    [Op.like]: `%${query.toLowerCase()}%`,
+                },
+            },
+            limit,
+            attributes: {
+                exclude: [...UserContext.RESTAURANT_EXTRA_FIELDS, 'description'],
+            },
+        });
+    }
+
+    /**
      *
      * Филиалы заведений
      *
@@ -347,6 +366,7 @@ export class UserContext {
     }
 
 
+    protected static readonly DISH_EXTRA_FIELDS: (keyof Dish)[] = ['createdAt', 'updatedAt', 'description'];
     /**
      * Возвращает блюда заведения
      * @param restaurantId Идентификатор заведения, блюда которого нужно вернуть
@@ -412,6 +432,33 @@ export class UserContext {
         if (!this.user) throw new Error('Access denied');
 
         return Dish.create({ restaurantId, categoryId, title, description });
+    }
+
+    /**
+     * Возвращает блюда для подсказок
+     * @param query Поисковый запрос
+     * @param limit Максимальное количество элементов
+     */
+    public suggestDishes(query: string, limit: number): Promise<Dish[]> {
+        return Dish.findAll({
+            where: {
+                title: {
+                    [Op.like]: `%${query.toLowerCase()}%`,
+                },
+            },
+            limit,
+            attributes: {
+                include: [
+                    [sequelize.fn('get_avg_rate_by_dish', sequelize.col('dish.id')), 'rateValue'],
+                    [sequelize.fn('get_count_rate_by_dish', sequelize.col('dish.id')), 'rateCount'],
+                ],
+                exclude: UserContext.DISH_EXTRA_FIELDS,
+            },
+            include: {
+                model: Category,
+                as: 'category',
+            },
+        });
     }
 
     /**

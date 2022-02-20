@@ -17,7 +17,8 @@
 
     height: $header-height;
 
-    &-Hamburger {
+    &-Hamburger,
+    &-Search {
         width: $header-height;
         height: $header-height;
         line-height: 0;

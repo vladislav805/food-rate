@@ -16,6 +16,7 @@ interface IInputProps extends IInputValue<string>, IClassNameProps {
     readOnly?: boolean;
     disabled?: boolean;
     placeholder?: string;
+    onInput?: React.FormEventHandler;
 }
 
 const Input: React.FC<IInputProps> = props => {

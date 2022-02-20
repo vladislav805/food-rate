@@ -1,6 +1,9 @@
 // User
 
 
+// Suggest
+export * from './suggest';
+
 // Restaurant
 export * from './addRestaurant';
 

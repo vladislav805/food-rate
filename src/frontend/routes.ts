@@ -5,11 +5,12 @@ import DishPage from '@pages/DishPage';
 import { RouteMatch } from 'react-router';
 import CategoriesPage from '@pages/CategoriesPage';
 import NewRestaurantPage from '@pages/NewRestaurantPage';
+import SearchPage from '@pages/SearchPage';
 
 export type Route = {
     path: string;
     component: React.ComponentType<any>;
-    getKey: (route: RouteMatch) => string;
+    getKey: (route: RouteMatch, query: Record<string, string>) => string;
 };
 
 /**
@@ -43,6 +44,11 @@ const routes: Route[] = [
         path: '/categories',
         component: CategoriesPage,
         getKey: () => 'categories',
+    },
+    {
+        path: '/search',
+        component: SearchPage,
+        getKey: (route, query) => `search_${query.query}_${query.offset || 0}`,
     },
     // /map
     // /page/:name

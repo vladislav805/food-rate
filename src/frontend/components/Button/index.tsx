@@ -8,13 +8,14 @@ import './Button.scss';
 interface IButtonProps extends IClassNameProps {
     type?: 'button' | 'submit';
     name?: string;
-    text: string;
+    /** @deprecated */
+    text?: string;
     onClick?: () => void;
     disabled?: boolean;
 }
 
-const Button: React.FC<IButtonProps> = props => {
-    const { type = 'button', text, className, ...rest } = props;
+const Button: React.FC<React.PropsWithChildren<IButtonProps>> = props => {
+    const { type = 'button', text, children, className, ...rest } = props;
 
     const ref = React.createRef<HTMLButtonElement>();
 
@@ -53,7 +54,7 @@ const Button: React.FC<IButtonProps> = props => {
             type={type}
             {...rest}
         >
-            {text}
+            {text ?? children}
         </button>
     );
 };

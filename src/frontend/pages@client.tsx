@@ -92,4 +92,6 @@ export const fetchers = {
     addRestaurant: async(params: { title: string; description: string; type: RestaurantType; vk: string; instagram: string }) => {
         return apiRequest<IRestaurant>('addRestaurant', params);
     },
+
+    suggest: async(text: string) => apiRequest<{ restaurants: IRestaurant[]; dishes: IDish[] }>('suggest', { text }),
 };

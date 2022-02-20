@@ -1,0 +1,52 @@
+@import '../../scss/const';
+@import '../../scss/z-indexes';
+
+.SearchSuggest {
+    $form-height: 3rem;
+    $form-gap: 1rem;
+
+    z-index: $zIndex-header__suggest;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: var(--color-background);
+
+    &-Form {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        padding: $form-gap;
+    }
+
+    &-Text {
+        height: $form-height;
+    }
+
+    &-Close {
+        height: $form-height;
+        padding: 0;
+
+        margin-left: $form-gap;
+
+        line-height: 0;
+
+        border: none;
+
+        svg {
+            // fill: var(--color-primary);
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    &-Item {
+        display: block;
+        text-decoration: none;
+        line-height: 2rem;
+        padding: 0 $default-padding-horizontal;
+        color: var(--color-primary);
+    }
+}

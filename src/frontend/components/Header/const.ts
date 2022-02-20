@@ -4,3 +4,4 @@ const cnHeader = cn('Header');
 export const headerCn = cnHeader();
 export const headerHamburgerCn = cnHeader('Hamburger');
 export const headerTitleCn = cnHeader('Title');
+export const headerSearchCn = cnHeader('Search');

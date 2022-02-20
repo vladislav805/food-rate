@@ -9,16 +9,18 @@ import {
     deleteCategory,
     deleteReview,
     getCategories,
+    suggest,
     reviews,
 } from './endpoints';
 
-export type Endpoint = (context: UserContext, req: express.Request) => Promise<any>;
+export type Endpoint<T = any> = (context: UserContext, req: express.Request) => Promise<T>;
 
 const endpoints: Record<string, Endpoint> = {
     addRestaurant,
     getCategories,
     addCategory,
     deleteCategory,
+    suggest,
     addDish,
     addReview,
     deleteReview,

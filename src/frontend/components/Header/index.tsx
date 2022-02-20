@@ -1,17 +1,18 @@
 import * as React from 'react';
 import Icon from '@mdi/react';
-import { mdiHamburger } from '@mdi/js';
+import { mdiHamburger, mdiMagnify } from '@mdi/js';
 
-import { headerCn, headerHamburgerCn, headerTitleCn } from './const';
+import { headerCn, headerHamburgerCn, headerSearchCn, headerTitleCn } from './const';
 
 import './Header.scss';
 
 type IHeaderProps = {
     title: string;
     toggleMenu: () => void;
+    openSearch: () => void;
 };
 
-const Header: React.FC<IHeaderProps> = ({ title, toggleMenu }) => {
+const Header: React.FC<IHeaderProps> = ({ title, toggleMenu, openSearch }) => {
     return (
         <div className={headerCn}>
             <button
@@ -24,6 +25,15 @@ const Header: React.FC<IHeaderProps> = ({ title, toggleMenu }) => {
                 />
             </button>
             <div className={headerTitleCn}>{title}</div>
+            <button
+                className={headerSearchCn}
+                onClick={openSearch}
+            >
+                <Icon
+                    path={mdiMagnify}
+                    color={null}
+                />
+            </button>
         </div>
     );
 };

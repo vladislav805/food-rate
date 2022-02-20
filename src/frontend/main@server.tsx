@@ -67,7 +67,7 @@ service.get('/*', async(req, res) => {
         return;
     }
 
-    const key = (activeRoute.route as Route).getKey(activeRoute);
+    const key = (activeRoute.route as Route).getKey(activeRoute, req.query as Record<string, string>);
 
     const globalContext: IGlobalContext = {
         user: context.getAuth()?.user ?? null,

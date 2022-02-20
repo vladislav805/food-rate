@@ -12,7 +12,7 @@ import Category, { init as initCategory } from '@database/models/category';
 import Branch, { init as initBranch } from '@database/models/branch';
 import config from '%config';
 
-const sequelize = new Sequelize(config.DATABASE_URI as string, {
+const sequelize = new Sequelize(config.DATABASE_URI, {
     dialect: 'mariadb',
     dialectModule: mysql2,
 });
@@ -30,17 +30,20 @@ const models: ModelInitializer[] = [
 models.forEach(initer => initer(sequelize));
 
 /*
- *        +------ Branch ------+
+ *        +------ Branch - - - +
  *        |                    |
- *        v                    v
+ *        |      Category
+ *        |         |          |
+ *        v         v          v
  * Restaurant <--> Dish <--> Review <--> User <--> Auth
- *                  ^
- *                  |
- *               Category
+ *                  ^           ^
+ *                  |           |
+ *                  +-- Photo --+
  */
 
 Restaurant.hasMany(Dish, {
     foreignKey: 'restaurantId',
+    onDelete: 'restrict',
 });
 Dish.belongsTo(Restaurant, {
     as: 'restaurant',
@@ -70,6 +73,7 @@ Review.belongsTo(Branch, {
 Category.hasMany(Dish, {
     foreignKey: 'categoryId',
     as: 'dish',
+    onDelete: 'restrict',
 });
 Dish.belongsTo(Category, {
     as: 'category',
@@ -84,6 +88,7 @@ Auth.belongsTo(User, {
 
 Restaurant.hasMany(Branch, {
     foreignKey: 'restaurantId',
+    onDelete: 'restrict',
 });
 Branch.belongsTo(Restaurant, {
     as: 'restaurant',

@@ -12,9 +12,9 @@ import Modal from '@components/Modal';
 import Button from '@components/Button';
 import ImageBase from '@components/Image';
 import withIntersection from '@components/Image/_withIntersection';
-import { fetchers } from '@frontend/pages@client';
 import { useFetch } from '@utils/useFetch';
 import { withNumericParams } from '@utils/withNumericParams';
+import { useDataProvider } from '@frontend/provider';
 
 import {
     dishPageCn,
@@ -39,9 +39,10 @@ export type IDishPageData = {
 };
 
 const DishPage: React.FC = () => {
+    const provider = useDataProvider();
     const globalContext = React.useContext(GlobalContext);
     const { restaurantId, dishId } = useParams() as Record<string, string>;
-    const { result, loading, reload } = useFetch<IDishPageData>(`dish${dishId}`, fetchers.dish, { restaurantId, dishId });
+    const { result, loading, reload } = useFetch(`dish${dishId}`, provider.getDishById, +restaurantId, +dishId);
 
     const [visibleReviewForm, setVisibleReviewForm] = React.useState<boolean>(false);
 

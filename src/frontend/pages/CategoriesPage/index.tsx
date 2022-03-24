@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import type { IList } from '@typings';
 import type { ICategory } from '@typings/objects';
-import { fetchers } from '@frontend/pages@client';
+import { useDataProvider } from '@frontend/provider';
 import { useFetch } from '@utils/useFetch';
 import { addToList, deleteFromList } from '@utils/apiList';
 import Modal from '@components/Modal';
@@ -18,7 +18,8 @@ export type ICategoriesPageData = {
 };
 
 const CategoriesPage: React.FC = () => {
-    const { result, loading, setResult } = useFetch<ICategoriesPageData>('categories', fetchers.categories);
+    const provider = useDataProvider();
+    const { result, loading, setResult } = useFetch('categories', provider.getCategories);
     const [visibleNewCategoryModal, setVisibleNewCategoryModal] = React.useState<boolean>(false);
 
     const openNewCategoryModal = React.useCallback(() => setVisibleNewCategoryModal(true), [setVisibleNewCategoryModal]);

@@ -17,8 +17,9 @@ import { renderFullPage } from '@utils/renderFullPage';
 
 import Root from '@components/Root';
 import type { IGlobalContext } from '@components/GlobalContext';
-import { ServerInitialDataContext } from '@components/ServerInitialDataContext';
+import { DataProviderContext } from '@components/DataProviderContext';
 import { COOKIE_NAME_AUTH_HASH } from '@frontend/const';
+import ServerDataProvider from '@frontend/provider/server';
 
 const getUserContext = (request: express.Request): UserContext => {
     return (request as unknown as { ctx: UserContext }).ctx;
@@ -60,7 +61,8 @@ service.get('/*', async(req, res) => {
 
     const [activeRoute] = activeRoutes;
     const context = getUserContext(req);
-    const initialData = await getDataByRoute(context, activeRoute);
+    const provider = new ServerDataProvider(context);
+    const initialData = await getDataByRoute(provider, activeRoute, context);
 
     if (req.query.ajax) {
         res.send(initialData);
@@ -75,11 +77,11 @@ service.get('/*', async(req, res) => {
     };
 
     const renderedHtml = ReactDOM.renderToString(
-        <ServerInitialDataContext.Provider value={initialData}>
+        <DataProviderContext.Provider value={provider}>
             <StaticRouter location={req.url!}>
                 <Root global={globalContext} />
             </StaticRouter>
-        </ServerInitialDataContext.Provider>
+        </DataProviderContext.Provider>
     );
 
     res.setHeader('Content-type', 'text/html; charset=utf-8');

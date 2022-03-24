@@ -3,65 +3,40 @@ import type { UserContext } from '@database/UserContext';
 import { IRestaurantPageData } from '@pages/RestaurantPage';
 import { IHomePageData } from '@pages/HomePage';
 import { IDishPageData } from '@pages/DishPage';
+import { IDataProvider } from '@frontend/provider';
 
-type RouteFetcher = (context: UserContext, route: RouteMatch) => Promise<any>;
+type RouteFetcher = (provider: IDataProvider, route: RouteMatch, context: UserContext) => Promise<any>;
 
 const fetchers: Record<string, RouteFetcher> = {
-    '/': async(context): Promise<IHomePageData> => {
-        const restaurants = await context.getRestaurants(50, 0);
+    '/': async(provider): Promise<IHomePageData> => provider.getHome(),
 
-        return { restaurants };
-    },
-
-    '/restaurant/:restaurantId': async(context, route): Promise<IRestaurantPageData> => {
+    '/restaurant/:restaurantId': async(provider, route): Promise<IRestaurantPageData> => {
         const restaurantId = Number(route.params.restaurantId);
-        const restaurant = await context.getRestaurantById(restaurantId);
 
-        if (!restaurant) throw new Error('Restaurant not found');
-
-        const categories = await context.getCategoriesOfRestaurant(restaurant.id);
-        const dishes = await context.getDishes(restaurant.id);
-        const average = await context.getRestaurantAverageRating(restaurant.id);
-        const branches = await context.getBranches(restaurant.id);
-
-        return { restaurant, dishes, categories, average, branches };
+        return provider.getRestaurantById(restaurantId);
     },
 
-    '/restaurant/:restaurantId/dish/:dishId': async(context, route): Promise<IDishPageData> => {
+    '/restaurant/:restaurantId/dish/:dishId': async(provider, route): Promise<IDishPageData> => {
         const params = route.params;
         const restaurantId = Number(params.restaurantId);
         const dishId = Number(params.dishId);
 
-        const restaurant = await context.getRestaurantById(restaurantId);
-
-        if (!restaurant) throw new Error('Restaurant not found');
-
-        const dish = await context.getDishById(restaurant.id, dishId);
-
-        if (!dish) throw new Error('Dish not found');
-
-        const reviews = await context.getReviewsByDishId(dish.id, 20, 0);
-
-        const myReview = await context.getReviewOfDishByUser(dish.id, )
-
-        return { restaurant, dish, reviews, myReview };
+        return provider.getDishById(restaurantId, dishId);
     },
 
-    '/categories': async(context) => {
-        const categories = await context.getCategories();
-        return { categories };
-    },
+    '/categories': async(provider) => provider.getCategories(),
 };
 
 /**
  * Возвращает данные из базы данныз для серверного рендера страницы
+ * @param provider Провайдер данных
  * @param context Контекст запроса пользователя
  * @param route Сработавший маршрут
  */
-export const getDataByRoute = (context: UserContext, route: RouteMatch): Promise<any> => {
+export const getDataByRoute = (provider: IDataProvider, route: RouteMatch, context: UserContext): Promise<any> => {
     const path = route.route.path!;
 
     return path in fetchers
-        ? fetchers[path](context, route)
+        ? fetchers[path](provider, route, context)
         : Promise.resolve({});
 };

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import type { IList } from '@typings';
-import { fetchers } from '@frontend/pages@client';
 import type { IBranch, ICategory, IDish, IRestaurant } from '@typings/objects';
 import StarRatingStatic from '@components/StarRatingStatic';
 import DishList from '@components/DishList';
@@ -23,6 +22,7 @@ import {
 } from './const';
 
 import './RestaurantPage.scss';
+import { useDataProvider } from '@frontend/provider';
 
 export type IRestaurantPageData = {
     restaurant: IRestaurant;
@@ -35,8 +35,9 @@ export type IRestaurantPageData = {
 const tabTitles: string[] = ['Блюда', 'Филиалы'];
 
 const RestaurantPage: React.FC = () => {
+    const provider = useDataProvider();
     const { restaurantId } = useParams();
-    const { result, loading } = useFetch<IRestaurantPageData>(`rest${restaurantId}`, fetchers.restaurant, { restaurantId: restaurantId! });
+    const { result, loading } = useFetch(`rest${restaurantId}`, provider.getRestaurantById, +restaurantId!);
 
     const [selectedTab, setSelectedTab] = React.useState<number>(0);
     const [visibleNewDishModal, setVisibleNewDishModal] = React.useState<boolean>(false);

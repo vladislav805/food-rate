@@ -3,18 +3,16 @@ import { Link } from 'react-router-dom';
 
 import type { IList } from '@typings';
 import type { IRestaurant } from '@typings/objects';
-import GlobalContext from '@components/GlobalContext';
+import { useDataProvider } from '@frontend/provider';
 import { useFetch } from '@utils/useFetch';
-import { fetchers } from '../../pages@client';
 
 export type IHomePageData = {
     restaurants: IList<IRestaurant>;
 };
 
 const HomePage: React.FC = () => {
-    const { result, loading } = useFetch<IHomePageData>('home', fetchers.home);
-
-    const globalContext = React.useContext(GlobalContext);
+    const provider = useDataProvider();
+    const { result, loading } = useFetch('home', provider.getHome);
 
     if (!result || loading) return <>loading...</>;
 

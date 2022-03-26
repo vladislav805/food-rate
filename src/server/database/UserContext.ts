@@ -12,6 +12,7 @@ import sequelize from '@database';
 import { createAuthHash } from '@database/createAuthHash';
 import createOffsetObject from '@server/utils/createOffsetObject';
 import type { AuthorizationServiceName, IUserInfo } from '@frontend/external/authorize/typings';
+import type { IUserStatistics } from '@typings/synthetic';
 
 export class UserContext {
     protected readonly user?: User;
@@ -180,6 +181,42 @@ export class UserContext {
         });
     }
 
+    public async getUserStatistics(userId: number): Promise<IUserStatistics | null> {
+        const visitedRestaurants = await Review.findOne({
+            attributes: [
+                [sequelize.fn('count', (sequelize.fn('distinct', sequelize.col('restaurantId')))), 'rateCount'],
+            ],
+            where: { userId },
+            include: {
+                attributes: [],
+                model: Dish,
+                as: 'dish',
+                required: true,
+            },
+            raw: true,
+        });
+
+        const countOfTestedDishes = await Review.count({ where: { userId } });
+
+        const avg = await Review.findOne({
+            attributes: [
+                [sequelize.fn('round', sequelize.fn('avg', sequelize.col('review.rate')), 2), 'rate'],
+            ],
+            where: { userId },
+        });
+
+        if (!avg || !visitedRestaurants) return null;
+
+        const countOfVisitedRestaurants = Number(visitedRestaurants.rateCount); // чтобы не добавлять новое поле
+        const averageRating = Number(avg.rate);
+
+        return {
+            countOfVisitedRestaurants,
+            countOfTestedDishes,
+            averageRating,
+        };
+    }
+
     /**
      * Возвращает отзывы от конкретного пользователя
      * @param userId Идентификатор пользователя, отзывы которого нужно получить
@@ -189,19 +226,21 @@ export class UserContext {
     public async getReviewsByUser(userId: number, limit: number, offset = 0): Promise<IList<IReview>> {
         const { count, rows } = await Review.findAndCountAll({
             where: { userId },
+            include: {
+                model: User,
+                as: 'user',
+            },
             limit,
             offset,
+            raw: true,
+            nest: true,
         });
 
         return {
             count,
-            items: rows.map(review => review.toJSON()),
+            items: rows as unknown as IReview[],
             offset: createOffsetObject(offset, count, limit),
         };
-    }
-
-    public async getReviewedRestaurantsByUser(userId: number, limit: number, offset = 0): Promise<IList<IReview>> {
-        return { count: 0, items: [] };
     }
 
     /**
@@ -275,11 +314,12 @@ export class UserContext {
                 where: { restaurantId },
                 as: 'dish',
             },
+            raw: true,
         });
 
         if (!result) return { count: 0, value: 0 };
 
-        const { rateValue, rateCount } = result.toJSON<IReview>();
+        const { rateValue, rateCount } = result;
 
         const value = Number(rateValue);
         const count = Number(rateCount);
@@ -388,12 +428,13 @@ export class UserContext {
                     [userId ? sequelize.fn('get_dish_rate_of_user', sequelize.col('dish.id'), sequelize.literal(String(userId))) : sequelize.literal('0'), 'rateMine'],
                 ],
             },
+            raw: true,
+            nest: true,
         });
 
-        return {
-            count,
-            items: rows.map(item => item.toJSON()),
-        };
+        const items = rows as unknown as IDish[];
+
+        return { count, items };
     }
 
     /**
@@ -414,11 +455,14 @@ export class UserContext {
                     [sequelize.fn('get_count_rate_by_dish', sequelize.col('dish.id')), 'rateCount'],
                 ],
             },
+            raw: true,
+            nest: true,
         });
 
-        if (!dish) return null;
+        return dish
+            ? dish as unknown as IDish
+            : null;
 
-        return dish.toJSON();
     }
 
     /**

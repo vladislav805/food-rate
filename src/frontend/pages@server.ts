@@ -1,9 +1,10 @@
 import type { RouteMatch } from 'react-router';
 import type { UserContext } from '@database/UserContext';
-import { IRestaurantPageData } from '@pages/RestaurantPage';
-import { IHomePageData } from '@pages/HomePage';
-import { IDishPageData } from '@pages/DishPage';
-import { IDataProvider } from '@frontend/provider';
+import type { IRestaurantPageData } from '@pages/RestaurantPage';
+import type { IHomePageData } from '@pages/HomePage';
+import type { IDishPageData } from '@pages/DishPage';
+import type { IDataProvider } from '@frontend/provider';
+import type { IUserPageData } from '@pages/UserPage';
 
 type RouteFetcher = (provider: IDataProvider, route: RouteMatch, context: UserContext) => Promise<any>;
 
@@ -25,6 +26,12 @@ const fetchers: Record<string, RouteFetcher> = {
     },
 
     '/categories': async(provider) => provider.getCategories(),
+
+    '/user/:userId': async(provider, route): Promise<IUserPageData> => {
+        const userId = Number(route.params.userId);
+
+        return provider.getUserById(userId);
+    },
 };
 
 /**

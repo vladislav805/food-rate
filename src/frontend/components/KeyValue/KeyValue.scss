@@ -1,0 +1,68 @@
+.KeyValue {
+    &-Item {
+        &Title,
+        &Value {
+            display: inline-block;
+        }
+
+        &Title {
+            font-weight: 700;
+
+            &::after {
+                content: ': ';
+                white-space: pre-wrap;
+            }
+        }
+
+        &Value {
+
+        }
+    }
+
+    &_layout {
+        &_column {
+            .KeyValue-Item {
+                display: block;
+            }
+        }
+
+        &_inline {
+            .KeyValue-Item {
+                display: inline-block;
+
+                &:not(:last-child) {
+                    margin-right: 1rem;
+                }
+            }
+        }
+
+        &_toc {
+            .KeyValue-Item {
+                display: flex;
+                flex-flow: nowrap row;
+                justify-content: space-between;
+
+                &Title {
+                    &::after {
+                        display: none;
+                    }
+                }
+
+                &Value {
+                    display: flex;
+                    flex-grow: 1;
+
+                    &::before {
+                        flex: 1;
+                        content: '\A0';
+                        position: relative;
+                        bottom: 5px;
+                        display: block;
+                        overflow: hidden;
+                        border-bottom: 1px dotted gray;
+                    }
+                }
+            }
+        }
+    }
+}

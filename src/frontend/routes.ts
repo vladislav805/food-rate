@@ -6,6 +6,7 @@ import { RouteMatch } from 'react-router';
 import CategoriesPage from '@pages/CategoriesPage';
 import NewRestaurantPage from '@pages/NewRestaurantPage';
 import SearchPage from '@pages/SearchPage';
+import UserPage from '@pages/UserPage';
 
 export type Route = {
     path: string;
@@ -17,6 +18,10 @@ export type Route = {
  * Описание роутинга в проекте
  * Прокидывается на серверном рендеринге и в клиентский.
  * НЕ КЛАСТЬ СЮДА СЕРВЕРНЫЙ КОД
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ * !! ПРИ ДОБАВЛЕНИИ НОВОГО ПУТИ НЕ ЗАБЫТЬ ДОБАВИТЬ ЕГО В /pages@server.ts !!
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 const routes: Route[] = [
     {
@@ -49,6 +54,11 @@ const routes: Route[] = [
         path: '/search',
         component: SearchPage,
         getKey: (route, query) => `search_${query.query}_${query.offset || 0}`,
+    },
+    {
+        path: '/user/:userId',
+        component: UserPage,
+        getKey: route => `user${route.params.userId}`,
     },
     // /map
     // /page/:name

@@ -1,0 +1,24 @@
+@import '../../scss/const';
+
+.UserPage {
+    &-Header {
+        display: flex;
+        flex-flow: nowrap row;
+        align-items: start;
+
+        padding: .5rem $default-padding-horizontal 1rem;
+
+        &Content {
+            flex: 1;
+            margin-right: $default-padding-horizontal;
+        }
+    }
+
+    &-Name {
+
+    }
+
+    &-Photo {
+
+    }
+}

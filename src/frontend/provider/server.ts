@@ -61,4 +61,17 @@ export default class ServerDataProvider implements IDataProvider {
         const categories = await this.context.getCategories();
         return this.setAsInitialData({ categories });
     }
+
+    @bind
+    public async getUserById(userId: number) {
+        const user = await this.context.getUserById(userId);
+
+        if (!user) throw new Error('User not found');
+
+        const statistics = await this.context.getUserStatistics(userId);
+
+        const reviews = await this.context.getReviewsByUser(userId, 10);
+
+        return this.setAsInitialData({ user, statistics, reviews });
+    }
 }

@@ -5,12 +5,13 @@ import type { ICategoriesPageData } from '@pages/CategoriesPage';
 import { bind } from '@utils/bind';
 
 import type { IDataProvider } from './typings';
+import type { IUserPageData } from '@pages/UserPage';
 
 type Params = Record<string, string | number | boolean>;
 type TrueParams = Record<string, string>;
 
 export default class ClientDataProvider implements IDataProvider {
-    public getInitialData(): unknown {
+    public getInitialData() {
         return null;
     }
 
@@ -44,5 +45,10 @@ export default class ClientDataProvider implements IDataProvider {
     @bind
     public getCategories() {
         return this.request<ICategoriesPageData>(`/categories`);
+    }
+
+    @bind
+    public getUserById(userId: number) {
+        return this.request<IUserPageData>(`/user/${userId}`);
     }
 }

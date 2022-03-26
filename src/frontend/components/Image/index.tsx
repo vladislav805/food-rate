@@ -25,8 +25,8 @@ const Image = React.forwardRef<HTMLDivElement, IImageProps>((props, ref) => {
     React.useEffect(() => setLoaded(false), [url]);
 
     const styles = React.useMemo(() => ({
-        width: `${imageWidth}px`,
-        height: `${imageHeight}px`,
+        width: imageWidth ? `${imageWidth}px` : undefined,
+        height: imageHeight ? `${imageHeight}px` : undefined,
         '--aspect-ratio': imageHeight && imageWidth ? imageHeight / imageWidth : undefined,
     } as React.CSSProperties), [imageWidth, imageHeight]);
 

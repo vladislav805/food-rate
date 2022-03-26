@@ -2,6 +2,7 @@ import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
+import type { IUserPageData } from '@pages/UserPage';
 
 export interface IDataProvider {
     /**
@@ -31,4 +32,10 @@ export interface IDataProvider {
      * Список категорий
      */
     getCategories(): Promise<ICategoriesPageData>;
+
+    /**
+     * Информация о пользователе
+     * @param userId
+     */
+    getUserById(userId: number): Promise<IUserPageData>;
 }

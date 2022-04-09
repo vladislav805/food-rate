@@ -8,11 +8,22 @@ import Restaurant, { RestaurantType } from '@database/models/restaurant';
 import Dish from '@database/models/dish';
 import Review from '@database/models/review';
 import Branch from '@database/models/branch';
+import Location from '@database/models/location';
 import sequelize from '@database';
 import { createAuthHash } from '@database/createAuthHash';
 import createOffsetObject from '@server/utils/createOffsetObject';
 import type { AuthorizationServiceName, IUserInfo } from '@frontend/external/authorize/typings';
 import type { IUserStatistics } from '@typings/synthetic';
+
+const attributesTimestamps = ['createdAt', 'updatedAt'];
+
+const excludedAttributes = {
+    __timestamps: attributesTimestamps,
+    user: [...attributesTimestamps, 'vkId', 'googleId', 'telegramId', 'locationId'] as (keyof User)[],
+    restaurant: [...attributesTimestamps, 'instagram', 'vk'] as (keyof Restaurant)[],
+    branch: [...attributesTimestamps, 'locationId', 'restaurantId'] as (keyof Branch)[],
+    dish: [...attributesTimestamps, 'description'] as (keyof Dish)[],
+};
 
 export class UserContext {
     protected readonly user?: User;
@@ -89,12 +100,12 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: UserContext.USER_EXTRA_FIELDS,
+                    exclude: excludedAttributes.user,
                 },
             }],
             where: { hash },
             attributes: {
-                exclude: ['createdAt', 'updatedAt'],
+                exclude: attributesTimestamps,
             },
         });
     }
@@ -167,15 +178,18 @@ export class UserContext {
      * Пользователи
      *
      */
-    protected static readonly USER_EXTRA_FIELDS: (keyof User)[] = ['createdAt', 'updatedAt', 'vkId', 'googleId', 'telegramId'];
     /**
      * Возвращает информацию о пользователе по идентификатору
      * @param userId Идентификатор пользователя
      */
     public getUserById(userId: number): Promise<User | null> {
         return User.findOne({
+            include: {
+                model: Location,
+                as: 'location',
+            },
             attributes: {
-                exclude: UserContext.USER_EXTRA_FIELDS,
+                exclude: excludedAttributes.user,
             },
             where: { id: userId },
         });
@@ -249,11 +263,6 @@ export class UserContext {
      *
      */
     /**
-     * Поля, которые не нужны при получении списка заведений
-     */
-    protected static readonly RESTAURANT_EXTRA_FIELDS: (keyof Restaurant)[] = ['instagram', 'vk', 'createdAt', 'updatedAt'];
-
-    /**
      * Возвращает список заведений
      * @param limit Максимальное количество, которое нужно вернуть
      * @param offset Сдвиг выборки
@@ -263,7 +272,7 @@ export class UserContext {
             limit,
             offset,
             attributes: {
-                exclude: UserContext.RESTAURANT_EXTRA_FIELDS,
+                exclude: excludedAttributes.restaurant,
             },
         });
 
@@ -363,7 +372,7 @@ export class UserContext {
             },
             limit,
             attributes: {
-                exclude: [...UserContext.RESTAURANT_EXTRA_FIELDS, 'description'],
+                exclude: [...excludedAttributes.restaurant, 'description'],
             },
         });
     }
@@ -378,7 +387,16 @@ export class UserContext {
      * @param restaurantId Идентификатор заведения, филиалы которого нужно вернуть
      */
     public async getBranches(restaurantId: number): Promise<IList<Branch>> {
-        const { count, rows } = await Branch.findAndCountAll({ where: { restaurantId } });
+        const { count, rows } = await Branch.findAndCountAll({
+            attributes: {
+                exclude: excludedAttributes.branch,
+            },
+            include: {
+                model: Location,
+                as: 'location',
+            },
+            where: { restaurantId },
+        });
 
         return { count, items: rows };
     }
@@ -405,8 +423,6 @@ export class UserContext {
         return Branch.create({ restaurantId, address, latitude, longitude });
     }
 
-
-    protected static readonly DISH_EXTRA_FIELDS: (keyof Dish)[] = ['createdAt', 'updatedAt', 'description'];
     /**
      * Возвращает блюда заведения
      * @param restaurantId Идентификатор заведения, блюда которого нужно вернуть
@@ -496,7 +512,7 @@ export class UserContext {
                     [sequelize.fn('get_avg_rate_by_dish', sequelize.col('dish.id')), 'rateValue'],
                     [sequelize.fn('get_count_rate_by_dish', sequelize.col('dish.id')), 'rateCount'],
                 ],
-                exclude: UserContext.DISH_EXTRA_FIELDS,
+                exclude: excludedAttributes.dish,
             },
             include: {
                 model: Category,
@@ -520,7 +536,7 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: UserContext.USER_EXTRA_FIELDS,
+                    exclude: excludedAttributes.user,
                 },
             },
         });
@@ -546,7 +562,7 @@ export class UserContext {
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: UserContext.USER_EXTRA_FIELDS,
+                    exclude: excludedAttributes.user,
                 },
             },
         });
@@ -575,7 +591,7 @@ console.log({userId: this.user.id, dishId, rate, text});
                 model: User,
                 as: 'user',
                 attributes: {
-                    exclude: UserContext.USER_EXTRA_FIELDS,
+                    exclude: excludedAttributes.user,
                 },
             },
         });

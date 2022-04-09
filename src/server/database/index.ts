@@ -10,6 +10,7 @@ import Dish, { init as initDish } from './models/dish';
 import Review, { init as initReview } from './models/review';
 import Category, { init as initCategory } from '@database/models/category';
 import Branch, { init as initBranch } from '@database/models/branch';
+import Location, { init as initLocation } from '@database/models/location';
 import config from '%config';
 
 const sequelize = new Sequelize(config.DATABASE_URI, {
@@ -25,16 +26,20 @@ const models: ModelInitializer[] = [
     initReview,
     initCategory,
     initBranch,
+    initLocation,
 ];
 
 models.forEach(initer => initer(sequelize));
 
 /*
- *        +------ Branch - - - +
- *        |                    |
- *        |      Category
- *        |         |          |
- *        v         v          v
+ *                  +------ Location ------+
+ *                  |                      |
+ *                  v                      |
+ *        +------ Branch - - - +           |
+ *        |                    |           |
+ *        |      Category      |           |
+ *        |         |          |           |
+ *        v         v          v           v
  * Restaurant <--> Dish <--> Review <--> User <--> Auth
  *                  ^           ^
  *                  |           |
@@ -94,6 +99,22 @@ Branch.belongsTo(Restaurant, {
     as: 'restaurant',
 });
 
-sequelize.sync({});
+Location.hasMany(User, {
+    foreignKey: 'locationId',
+});
+User.belongsTo(Location, {
+    as: 'location',
+});
+
+Location.hasMany(Branch, {
+    foreignKey: 'locationId',
+    onDelete: 'restrict',
+});
+
+Branch.belongsTo(Location, {
+    as: 'location',
+});
+
+sequelize.sync({ });
 
 export default sequelize;

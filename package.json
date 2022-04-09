@@ -14,7 +14,8 @@
     "clean": "rm -rf dist",
     "build": "npm-run-all -p build:frontend build:server",
     "build:server": "webpack --config ./webpack.server.config.js",
-    "build:frontend": "NODE_ENV=production webpack --config ./webpack.config.js"
+    "build:frontend": "NODE_ENV=production webpack --config ./webpack.config.js",
+    "tools:install": "ts-node-dev --require ./ts-loader.fix.js -r tsconfig-paths/register src/tools/installation"
   },
   "keywords": [
     "food"

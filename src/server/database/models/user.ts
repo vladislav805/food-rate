@@ -12,6 +12,7 @@ export interface UserAttributes {
     photoSmall?: string;
     photoLarge?: string;
     role: UserRole;
+    locationId?: number;
 }
 
 type UserCreationAttributes = Optional<UserAttributes, 'id'>;
@@ -25,6 +26,7 @@ export default class User extends Model<UserAttributes, UserCreationAttributes> 
     declare photoSmall: string;
     declare photoLarge: string;
     declare role: UserRole;
+    declare locationId?: number;
 
     declare readonly createdAt: Date;
     declare readonly updatedAt: Date;
@@ -67,6 +69,10 @@ export const init: ModelInitializer = sequelize => {
         role: {
             type: DataTypes.ENUM('user', 'moderator', 'admin'),
             defaultValue: 'user',
+        },
+        locationId: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true,
         },
     }, {
         sequelize,

@@ -25,7 +25,7 @@
             "%config": ["config.ts"],
             "@external/*": ["external/*"]
         },
-        "types": ["react/next", "react-dom/next", "node"]
+        "types": ["node"]
     },
     "include": [
         "src/**/*"

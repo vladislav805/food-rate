@@ -2,7 +2,7 @@ import './scss/reset.scss';
 import './scss/themes/default.scss';
 import 'animate.css';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import Root from '@components/Root';
 import { DataProviderContext } from '@components/DataProviderContext';

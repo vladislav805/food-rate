@@ -82,7 +82,7 @@ service.get('/*', async(req, res) => {
     let initialData;
 
     try {
-        initialData = await getDataByRoute({provider, route: activeRoute, context, globalContext});
+        initialData = await getDataByRoute({ provider, route: activeRoute, context, globalContext });
     } catch (e) {
         res.send(`error occurred while handle your request ${e && (e as Error).message}`);
         return;

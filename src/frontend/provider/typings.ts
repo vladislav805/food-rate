@@ -1,10 +1,11 @@
+import type { IBranch, IDish } from '@typings/objects';
 import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
 import type { IUserPageData } from '@pages/UserPage';
 import type { IDishCreatePageData } from '@pages/NewDishPage';
-import type { IDish } from '@typings/objects';
+import type { IBranchCreatePageData } from '@pages/NewBranchPage';
 
 export interface IDataProvider {
     /**
@@ -22,6 +23,21 @@ export interface IDataProvider {
      * @param restaurantId
      */
     getRestaurantById(restaurantId: number): Promise<IRestaurantPageData>;
+
+    /**
+     * Информация, требуемая на форме создания филиала заведения
+     */
+    preCreateBranchData(restaurantId: number): Promise<IBranchCreatePageData>;
+
+    /**
+     * Создание нового филиала для заведения. ТОЛЬКО КЛИЕНТСКАЯ РЕАЛИЗАЦИЯ
+     * @param restaurantId Идентификатор заведения
+     * @param address Адрес в человеческом виде
+     * @param lat Координаты
+     * @param lng Координаты
+     * @param regionCode Региональный код
+     */
+    createBranch(restaurantId: number, address: string, lat: number, lng: number, regionCode: string): Promise<IBranch>;
 
     /**
      * Информация о блюде в заведении

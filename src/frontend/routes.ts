@@ -8,6 +8,7 @@ import NewRestaurantPage from '@pages/NewRestaurantPage';
 import SearchPage from '@pages/SearchPage';
 import UserPage from '@pages/UserPage';
 import NewDishPage from '@pages/NewDishPage';
+import NewBranchPage from '@pages/NewBranchPage';
 
 export type Route = {
     path: string;
@@ -49,6 +50,11 @@ const routes: Route[] = [
         path: '/restaurant/:restaurantId/dish/:dishId',
         component: DishPage,
         getKey: route => `r${route.params.restaurantId}/d${route.params.dishId}`,
+    },
+    {
+        path: '/restaurant/:restaurantId/branch/new',
+        component: NewBranchPage,
+        getKey: route => `r/${route.params.restaurantId}/b/new`,
     },
     // /restaurant/:restaurantId/branch/:branchId(\d+)
     {

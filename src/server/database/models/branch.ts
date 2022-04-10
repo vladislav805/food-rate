@@ -7,6 +7,7 @@ export interface BranchAttributes {
     address: string;
     latitude: number;
     longitude: number;
+    regionCode: string;
 }
 
 type BranchCreationAttributes = Optional<BranchAttributes, 'id'>;
@@ -17,6 +18,7 @@ export default class Branch extends Model<BranchAttributes, BranchCreationAttrib
     declare address: string;
     declare latitude: number;
     declare longitude: number;
+    declare regionCode: string;
 
     declare readonly createdAt: Date;
     declare readonly updatedAt: Date;
@@ -50,6 +52,9 @@ export const init: ModelInitializer = sequelize => {
                 min: -180,
                 max: 180,
             },
+        },
+        regionCode: {
+            type: DataTypes.STRING(8),
         },
     }, {
         sequelize,

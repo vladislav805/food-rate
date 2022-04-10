@@ -1,11 +1,12 @@
+import { bind } from '@utils/bind';
 import type { IHomePageData } from '@pages/HomePage';
 import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
 import type { IUserPageData } from '@pages/UserPage';
 import type { IDishCreatePageData } from '@pages/NewDishPage';
-import type { IDish } from '@typings/objects';
-import { bind } from '@utils/bind';
+import type { IBranchCreatePageData } from '@pages/NewBranchPage';
+import type { IBranch, IDish } from '@typings/objects';
 
 import type { IDataProvider } from './typings';
 
@@ -17,6 +18,11 @@ export default class ClientDataProvider implements IDataProvider {
         return null;
     }
 
+    /**
+     * Запрос данных для полноценной страницы.
+     * @param url Адрес, по которому ожидается страница
+     * @param params Параметры
+     */
     protected async request<T>(url: string, params: Params = {}): Promise<T> {
         params.ajax = '1';
         const queryString = new URLSearchParams(params as TrueParams);
@@ -29,6 +35,12 @@ export default class ClientDataProvider implements IDataProvider {
         return request.json();
     }
 
+    /**
+     * Запрос данных от API для частичного обновления/изменения данных
+     * @param method Название метода API
+     * @param params Параметры
+     * @protected
+     */
     protected async apiCall<T>(method: string, params: Params = {}): Promise<T> {
         const request = await fetch(`/api/v1/${method}`, {
             mode: 'cors',
@@ -58,7 +70,17 @@ export default class ClientDataProvider implements IDataProvider {
     @bind
     public getRestaurantById(restaurantId: number) {
         return this.request<IRestaurantPageData>(`/restaurant/${restaurantId}`);
-    };
+    }
+
+    @bind
+    public preCreateBranchData(restaurantId: number) {
+        return this.request<IBranchCreatePageData>(`/restaurant/${restaurantId}/branch/new`);
+    }
+
+    @bind
+    public createBranch(restaurantId: number, address: string, lat: number, lng: number, regionCode: string): Promise<IBranch> {
+        return this.apiCall<IBranch>('addBranch', { restaurantId, address, lat, lng, regionCode });
+    }
 
     @bind
     public getDishById(restaurantId: number, dishId: number) {
@@ -66,11 +88,11 @@ export default class ClientDataProvider implements IDataProvider {
     }
 
     @bind
-    public preCreateDishData(restaurantId: number): Promise<IDishCreatePageData> {
+    public preCreateDishData(restaurantId: number) {
         return this.request<IDishCreatePageData>(`/restaurant/${restaurantId}/new`);
     }
 
-    public createDish(restaurantId: number, title: string, description: string, categoryId: number): Promise<IDish> {
+    public createDish(restaurantId: number, title: string, description: string, categoryId: number) {
         return this.apiCall<IDish>('addDish', { restaurantId, title, description, categoryId });
     }
 

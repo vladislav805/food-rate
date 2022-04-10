@@ -40,6 +40,13 @@ const fetchers: Record<string, RouteFetcher> = {
         return provider.getDishById(restaurantId, dishId);
     },
 
+    '/restaurant/:restaurantId/branch/new': async({ provider, route }) => {
+        const params = route.params;
+        const restaurantId = Number(params.restaurantId);
+
+        return provider.preCreateBranchData(restaurantId);
+    },
+
     '/categories': async({ provider }) => provider.getCategories(),
 
     '/user/:userId': async({ provider, route }): Promise<IUserPageData> => {

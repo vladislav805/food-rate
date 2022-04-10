@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import type { IList } from '@typings';
-import type { ICategory, IDish, IRestaurant, IReview, IUser } from '@typings/objects';
+import type { ICategory, IDish, IRegion, IRestaurant, IReview, IUser } from '@typings/objects';
 import Auth from '@database/models/auth';
 import User from '@database/models/user';
 import Category from '@database/models/category';
@@ -416,11 +416,12 @@ export class UserContext {
      * @param address Адрес в свободной форме
      * @param latitude Координаты: широта
      * @param longitude Координаты: долгота
+     * @param regionCode Региональный код
      */
-    public async createBranch(restaurantId: number, address: string, latitude: number, longitude: number): Promise<Branch> {
+    public async createBranch(restaurantId: number, address: string, latitude: number, longitude: number, regionCode: string): Promise<Branch> {
         if (!this.auth) throw new Error('Access denied');
 
-        return Branch.create({ restaurantId, address, latitude, longitude });
+        return Branch.create({ restaurantId, address, latitude, longitude, regionCode });
     }
 
     /**
@@ -629,6 +630,17 @@ console.log({userId: this.user.id, dishId, rate, text});
         try {
             await Region.create({ code, country, region, city });
         } catch (e) { console.info(`Region ${code} already exists`) }
+    }
+
+    /**
+     * Возвращает список регионов
+     * @param limit Требуемое количество элементов
+     * @param offset Сдвиг выборки
+     */
+    public async getRegions(limit: number = 100, offset: number = 0): Promise<IList<IRegion>> {
+        const { count, rows } = await Region.findAndCountAll({ limit, offset });
+
+        return { count, items: rows };
     }
 }
 

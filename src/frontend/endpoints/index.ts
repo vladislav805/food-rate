@@ -7,6 +7,9 @@ export * from './suggest';
 // Restaurant
 export * from './addRestaurant';
 
+// Branch
+export * from './addBranch';
+
 // Dish
 export * from './addDish';
 

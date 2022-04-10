@@ -1,4 +1,6 @@
 import { UserContext } from '@database/UserContext';
+import type { IDish } from '@typings/objects';
+import type { IDishCreatePageData } from '@pages/NewDishPage';
 
 import type { IDataProvider } from './typings';
 import { bind } from '@utils/bind';
@@ -54,6 +56,21 @@ export default class ServerDataProvider implements IDataProvider {
         const myReview = await this.context.getReviewOfDishByUser(dish.id, )
 
         return this.setAsInitialData({ restaurant, dish, reviews, myReview });
+    }
+
+    @bind
+    public async preCreateDishData(restaurantId: number): Promise<IDishCreatePageData> {
+        const restaurant = await this.context.getRestaurantById(restaurantId);
+
+        if (!restaurant) throw new Error('Restaurant not found');
+
+        const categories = await this.context.getCategories();
+
+        return this.setAsInitialData({ restaurant, categories });
+    }
+
+    public createDish(restaurantId: number, title: string, description: string, categoryId: number): Promise<IDish> {
+        throw new Error('Only client-side method');
     }
 
     @bind

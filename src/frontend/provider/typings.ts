@@ -3,6 +3,8 @@ import type { IRestaurantPageData } from '@pages/RestaurantPage';
 import type { IDishPageData } from '@pages/DishPage';
 import type { ICategoriesPageData } from '@pages/CategoriesPage';
 import type { IUserPageData } from '@pages/UserPage';
+import type { IDishCreatePageData } from '@pages/NewDishPage';
+import type { IDish } from '@typings/objects';
 
 export interface IDataProvider {
     /**
@@ -27,6 +29,21 @@ export interface IDataProvider {
      * @param dishId
      */
     getDishById(restaurantId: number, dishId: number): Promise<IDishPageData>;
+
+    /**
+     * Информация, требуемая на форме создания блюда в заведении
+     * @param restaurantId
+     */
+    preCreateDishData(restaurantId: number): Promise<IDishCreatePageData>;
+
+    /**
+     * Создание нового блюда в заведении. ТОЛЬКО КЛИЕНТСКАЯ РЕАЛИЗАЦИЯ!
+     * @param restaurantId
+     * @param title
+     * @param description
+     * @param categoryId
+     */
+    createDish(restaurantId: number, title: string, description: string, categoryId: number): Promise<IDish>;
 
     /**
      * Список категорий

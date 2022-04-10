@@ -10,7 +10,7 @@ import Dish, { init as initDish } from './models/dish';
 import Review, { init as initReview } from './models/review';
 import Category, { init as initCategory } from '@database/models/category';
 import Branch, { init as initBranch } from '@database/models/branch';
-import Location, { init as initLocation } from '@database/models/location';
+import Region, { init as initLocation } from '@database/models/region';
 import config from '%config';
 
 const sequelize = new Sequelize(config.DATABASE_URI, {
@@ -99,20 +99,20 @@ Branch.belongsTo(Restaurant, {
     as: 'restaurant',
 });
 
-Location.hasMany(User, {
-    foreignKey: 'locationId',
+Region.hasMany(User, {
+    foreignKey: 'regionCode',
 });
-User.belongsTo(Location, {
-    as: 'location',
+User.belongsTo(Region, {
+    as: 'region',
 });
 
-Location.hasMany(Branch, {
-    foreignKey: 'locationId',
+Region.hasMany(Branch, {
+    foreignKey: 'regionId',
     onDelete: 'restrict',
 });
 
-Branch.belongsTo(Location, {
-    as: 'location',
+Branch.belongsTo(Region, {
+    as: 'region',
 });
 
 sequelize.sync({ });

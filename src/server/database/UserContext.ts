@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import type { IList } from '@typings';
-import type { IDish, IRestaurant, IReview, IUser } from '@typings/objects';
+import type { ICategory, IDish, IRestaurant, IReview, IUser } from '@typings/objects';
 import Auth from '@database/models/auth';
 import User from '@database/models/user';
 import Category from '@database/models/category';
@@ -8,7 +8,7 @@ import Restaurant, { RestaurantType } from '@database/models/restaurant';
 import Dish from '@database/models/dish';
 import Review from '@database/models/review';
 import Branch from '@database/models/branch';
-import Location from '@database/models/location';
+import Region from '@database/models/region';
 import sequelize from '@database';
 import { createAuthHash } from '@database/createAuthHash';
 import createOffsetObject from '@server/utils/createOffsetObject';
@@ -19,9 +19,9 @@ const attributesTimestamps = ['createdAt', 'updatedAt'];
 
 const excludedAttributes = {
     __timestamps: attributesTimestamps,
-    user: [...attributesTimestamps, 'vkId', 'googleId', 'telegramId', 'locationId'] as (keyof User)[],
+    user: [...attributesTimestamps, 'vkId', 'googleId', 'telegramId', 'regionCode'] as (keyof User)[],
     restaurant: [...attributesTimestamps, 'instagram', 'vk'] as (keyof Restaurant)[],
-    branch: [...attributesTimestamps, 'locationId', 'restaurantId'] as (keyof Branch)[],
+    branch: [...attributesTimestamps, 'regionId', 'restaurantId'] as (keyof Branch)[],
     dish: [...attributesTimestamps, 'description'] as (keyof Dish)[],
 };
 
@@ -130,7 +130,7 @@ export class UserContext {
     /**
      * Возвращает список категорий
      */
-    public async getCategories(): Promise<IList<Category>> {
+    public async getCategories(): Promise<IList<ICategory>> {
         const { count, rows } = await Category.findAndCountAll();
 
         return { count, items: rows };
@@ -185,8 +185,8 @@ export class UserContext {
     public getUserById(userId: number): Promise<User | null> {
         return User.findOne({
             include: {
-                model: Location,
-                as: 'location',
+                model: Region,
+                as: 'region',
             },
             attributes: {
                 exclude: excludedAttributes.user,
@@ -392,8 +392,8 @@ export class UserContext {
                 exclude: excludedAttributes.branch,
             },
             include: {
-                model: Location,
-                as: 'location',
+                model: Region,
+                as: 'region',
             },
             where: { restaurantId },
         });
@@ -610,6 +610,25 @@ console.log({userId: this.user.id, dishId, rate, text});
         const affected = await Review.destroy({ where: { id: reviewId, userId: this.user.id } });
 
         return affected > 0;
+    }
+
+    /**
+     *
+     * Регионы
+     *
+     */
+    /**
+     * Попытка добавить регион в БД. Игнорируем ошибки, поскольку регион уже может существовать.
+     * TODO: Передать как-то более нормально
+     * @param code Код региона в ISO-3166-2. Например, Санкт-Петербург: RU-SPE; Москва - RU-MOW; Ленобласть - RU-LEN.
+     * @param country Название страны
+     * @param region Название области
+     * @param city Название города
+     */
+    public async tryPushRegion(code: string, country: string, region: string, city: string): Promise<void> {
+        try {
+            await Region.create({ code, country, region, city });
+        } catch (e) { console.info(`Region ${code} already exists`) }
     }
 }
 

@@ -3,17 +3,15 @@ import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import type { IList } from '@typings';
 import type { IBranch, ICategory, IDish, IRestaurant } from '@typings/objects';
+import { useDataProvider } from '@frontend/provider';
 import StarRatingStatic from '@components/StarRatingStatic';
 import DishList from '@components/DishList';
 import BranchList from '@components/BranchList';
 import Tabs from '@components/Tabs';
 import GlobalContext from '@components/GlobalContext';
-import Button from '@components/Button';
-import Modal from '@components/Modal';
 import { useFetch } from '@utils/useFetch';
 import { withNumericParams } from '@utils/withNumericParams';
 
-import NewBranchModal from './RestaurantPage.components/NewDishModal';
 import {
     restaurantPageCn,
     restaurantPageDescriptionCn,
@@ -22,7 +20,6 @@ import {
 } from './const';
 
 import './RestaurantPage.scss';
-import { useDataProvider } from '@frontend/provider';
 
 export type IRestaurantPageData = {
     restaurant: IRestaurant;
@@ -73,11 +70,7 @@ const RestaurantPage: React.FC = () => {
             >
                 <div>
                     {isAuthorized && (
-                        <Button
-                            text="Добавить блюдо"
-                            type="button"
-                            onClick={openNewDishModal}
-                        />
+                        <Link to={`/restaurant/${restaurant.id}/dish/new`}>Добавить блюдо</Link>
                     )}
                     <DishList
                         restaurant={restaurant}
@@ -92,11 +85,6 @@ const RestaurantPage: React.FC = () => {
                     <BranchList branches={branches.items} />
                 </div>
             </Tabs>
-            <Modal visible={visibleNewDishModal} setVisible={setVisibleNewDishModal}>
-                <NewBranchModal
-                    restaurant={restaurant}
-                />
-            </Modal>
         </div>
     );
 };

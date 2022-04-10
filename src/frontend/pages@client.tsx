@@ -5,6 +5,7 @@ import type { RestaurantType } from '@database/models/restaurant';
 
 type Params = Record<string, string | number | boolean>;
 
+/** @deprecated */
 async function apiRequest<T>(method: string, params: Params = {}): Promise<T> {
     const request = await fetch(`/api/v1/${method}`, {
         mode: 'cors',

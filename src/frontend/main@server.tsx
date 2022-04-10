@@ -20,6 +20,7 @@ import type { IGlobalContext } from '@components/GlobalContext';
 import { DataProviderContext } from '@components/DataProviderContext';
 import { COOKIE_NAME_AUTH_HASH } from '@frontend/const';
 import ServerDataProvider from '@frontend/provider/server';
+import { getUserIpLocation } from '@frontend/external/geoip';
 
 const getUserContext = (request: express.Request): UserContext => {
     return (request as unknown as { ctx: UserContext }).ctx;
@@ -59,10 +60,33 @@ service.get('/*', async(req, res) => {
         return;
     }
 
-    const [activeRoute] = activeRoutes;
     const context = getUserContext(req);
+
+    const ipAddress = req.headers['x-real-ip'] as string ?? req.socket.remoteAddress!;
+
+    const globalContext: IGlobalContext = {
+        user: null,
+        title: 'Main',
+        location: await getUserIpLocation(ipAddress, context),
+    };
+
+    const [activeRoute] = activeRoutes;
+
+    const auth = context.getAuth();
+    if (auth) {
+        globalContext.user = auth.user;
+    }
+
     const provider = new ServerDataProvider(context);
-    const initialData = await getDataByRoute(provider, activeRoute, context);
+
+    let initialData;
+
+    try {
+        initialData = await getDataByRoute({provider, route: activeRoute, context, globalContext});
+    } catch (e) {
+        res.send(`error occurred while handle your request ${e && (e as Error).message}`);
+        return;
+    }
 
     if (req.query.ajax) {
         res.send(initialData);
@@ -70,11 +94,6 @@ service.get('/*', async(req, res) => {
     }
 
     const key = (activeRoute.route as Route).getKey(activeRoute, req.query as Record<string, string>);
-
-    const globalContext: IGlobalContext = {
-        user: context.getAuth()?.user ?? null,
-        title: 'Main',
-    };
 
     const renderedHtml = ReactDOM.renderToString(
         <DataProviderContext.Provider value={provider}>

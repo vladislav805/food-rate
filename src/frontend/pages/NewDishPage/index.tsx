@@ -1,23 +1,29 @@
 import * as React from 'react';
-import type { IRestaurant } from '@typings/objects';
+import { useNavigate, useParams } from 'react-router';
+import type { IList } from '@typings';
+import type { ICategory, IRestaurant } from '@typings/objects';
+import { useDataProvider } from '@frontend/provider';
 import withLabel from '@components/withLabel';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import { useFetch } from '@utils/useFetch';
-import { fetchers } from '@frontend/pages@client';
 import Spinner from '@components/Spinner';
 import Select, { ISelectItem, SelectChanger } from '@components/Select';
-import { useNavigate } from 'react-router';
 
-type INewDishModalProps = {
+export interface IDishCreatePageData {
     restaurant: IRestaurant;
-};
+    categories: IList<ICategory>;
+}
 
 const InputWithLabel = withLabel(Input);
 const SelectWithLabel = withLabel(Select);
 
-const NewDishModal: React.FC<INewDishModalProps> = ({ restaurant }) => {
-    const { result: categories, loading } = useFetch(`categories`, fetchers.getCategories);
+const NewDishPage: React.FC = () => {
+    const params = useParams<'restaurantId'>();
+    const provider = useDataProvider();
+
+    const { result, loading } = useFetch(`r${params.restaurantId}/new`, provider.preCreateDishData, Number(params.restaurantId));
+
     const [busy, setBusy] = React.useState<boolean>(false);
     const [title, setTitle] = React.useState<string>('');
     const [description, setDescription] = React.useState<string>('');
@@ -30,21 +36,16 @@ const NewDishModal: React.FC<INewDishModalProps> = ({ restaurant }) => {
 
         setBusy(true);
 
-        fetchers.addDish({
-            restaurantId: restaurant.id,
-            title,
-            description,
-            categoryId,
-        }).then(dish => {
-            navigate(`/restaurant/${restaurant.id}/dish/${dish.id}`);
-        })
-    }, [title, description, categoryId]);
+        provider.createDish(result!.restaurant.id, title, description, categoryId).then(dish => {
+            navigate(`/restaurant/${result!.restaurant.id}/dish/${dish.id}`);
+        });
+    }, [provider, title, description, categoryId]);
 
     const categoryItems = React.useMemo<ISelectItem<number>[] | undefined>(() => {
-        return categories?.items.map(category => ({ value: category.id, title: category.title }));
-    }, [categories]);
+        return result ? result.categories?.items.map(category => ({ value: category.id, title: category.title })) : [];
+    }, [result?.categories]);
 
-    if (!categories || loading) return <Spinner />;
+    if (!result || loading) return <Spinner />;
 
     return (
         <form onSubmit={onSubmit}>
@@ -82,4 +83,4 @@ const NewDishModal: React.FC<INewDishModalProps> = ({ restaurant }) => {
     );
 };
 
-export default NewDishModal;
+export default NewDishPage;

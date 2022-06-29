@@ -2,12 +2,12 @@ const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     target: 'node',
     entry: path.resolve('src', 'index.ts'),
     output: {
         path: path.resolve('dist'),
-        filename: `server.js`,
+        filename: `server.cjs`,
     },
     module: {
         rules: [
@@ -26,7 +26,7 @@ module.exports = {
                 test: /\.s?css$/i,
                 use: [
                     {
-                        loader: 'null-loader',
+                        loader: 'ignore-loader',
                     },
                 ],
             },
@@ -42,6 +42,7 @@ module.exports = {
 
         fallback: {
             'pg-hstore': false,
+            cardinal: false,
         }
     },
     stats: 'minimal',

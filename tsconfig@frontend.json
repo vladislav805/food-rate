@@ -1,8 +1,10 @@
 {
     "extends": "./tsconfig.json",
     "compilerOptions": {
-        "lib": ["es6", "es7", "es2020", "DOM"],
-        "outDir": "dist"
+        "outDir": "dist",
+        "target": "esnext",
+        "module": "commonjs",
+        "jsx": "react"
     },
     "include": [
         "src/**/*"

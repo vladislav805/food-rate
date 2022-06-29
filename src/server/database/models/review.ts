@@ -1,5 +1,5 @@
-import type { ModelInitializer } from '@database/typings';
-import type { UserAttributes } from '@database/models/user';
+import type { ModelInitializer } from '@database/typings.js';
+import type { UserAttributes } from '@database/models/user.js';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface ReviewAttributes {

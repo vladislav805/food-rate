@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
 import type { IList } from '@typings';
-import type { ICategory, IDish, IRegion, IRestaurant, IReview, IUser } from '@typings/objects';
+import type { ICategory, IDish, IRegion, IRestaurant, IReview, IUser } from '@typings/objects.js';
 import Auth from '@database/models/auth';
 import User from '@database/models/user';
 import Category from '@database/models/category';

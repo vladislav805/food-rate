@@ -1,1 +1,1 @@
-import '@database/index';
+import './database/index';

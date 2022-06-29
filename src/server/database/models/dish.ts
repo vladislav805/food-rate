@@ -1,6 +1,6 @@
-import type { ModelInitializer } from '@database/typings';
+import type { ModelInitializer } from '@database/typings.js';
 import { DataTypes, Model, Optional } from 'sequelize';
-import Category, { CategoryAttributes } from '@database/models/category';
+import Category, { CategoryAttributes } from '@database/models/category.js';
 
 export interface DishAttributes {
     id: number;

@@ -1,4 +1,4 @@
-import type { ModelInitializer } from '@database/typings';
+import type { ModelInitializer } from '@database/typings.js';
 import { DataTypes, Model, Optional } from 'sequelize';
 
 export interface RegionAttributes {

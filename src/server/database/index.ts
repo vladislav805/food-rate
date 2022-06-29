@@ -8,9 +8,9 @@ import Auth, { init as initAuth } from './models/auth';
 import Restaurant, { init as initRestaurant } from './models/restaurant';
 import Dish, { init as initDish } from './models/dish';
 import Review, { init as initReview } from './models/review';
-import Category, { init as initCategory } from '@database/models/category';
-import Branch, { init as initBranch } from '@database/models/branch';
-import Region, { init as initLocation } from '@database/models/region';
+import Category, { init as initCategory } from './models/category';
+import Branch, { init as initBranch } from './models/branch';
+import Region, { init as initLocation } from './models/region';
 import config from '%config';
 
 const sequelize = new Sequelize(config.DATABASE_URI, {
